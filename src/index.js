@@ -1,16 +1,6 @@
-import { tap as _tap, find, isNil, pipe, reduce, prop, differenceWith } from 'ramda';
+import { tap as _tap, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass } from 'ramda';
 
 export const tap = x => _tap(console.log, isNil(x) ? 'null' : x);
-
-// env
-
-export const port = process.env.PORT || 3000;
-export const isDev = () => process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-export const isProd = () => process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
-
-export const host = isDev() ? `http://localhost:${port}/` : '/';
-export const api = host + 'api/';
-export const admin = host + 'admin/';
 
 // array
 
@@ -60,3 +50,13 @@ export const toAbsDate = d => new Date(d).toISOString().slice(0, 10);
 export const isPrimitiveType = anyPass([is(Number), is(String), is(Boolean)]);
 
 export const diff = p => differenceWith((a, b) => isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id']);
+
+// env
+
+export const port = process.env.PORT || 3000;
+export const isDev = () => process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+export const isProd = () => process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+
+export const host = isDev() ? `http://localhost:${port}/` : '/';
+export const api = host + 'api/';
+export const admin = host + 'admin/';
