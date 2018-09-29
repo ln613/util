@@ -1,4 +1,4 @@
-import { tap as _tap, sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt } from 'ramda';
+import { tap as _tap, sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc } from 'ramda';
 
 export const tap = x => _tap(console.log, isNil(x) ? 'null' : x);
 
@@ -17,7 +17,7 @@ export const getNameById = getPropById('name')
 export const getPropByName = p => name => pipe(findByName(name), prop(p));
 export const getPropByProp = (p1, p2, val) => pipe(findByProp(p2)(val), prop(p1));
 
-export const addIndex = p => arr => arr.map((x, i) => ({ [p || 'id']: i + 1, ...x }));
+export const addIndex = p => arr => arr.map((x, i) => ({ [p || 'id']: i + 1, ...dissoc([p || 'id'], x) }));
 
 export const sort = _sort((a, b) => a - b);
 export const sortDesc = _sort((a, b) => b - a);
