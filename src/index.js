@@ -1,4 +1,7 @@
-import { tap as _tap, sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc } from 'ramda';
+import { tap as _tap, sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc, lensPath, view, set as _set, over } from 'ramda';
+
+const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
+const reEscapeChar = /\\(\\)?/g; // from lodash/fp
 
 export const tap = x => _tap(console.log, isNil(x) ? 'null' : x);
 
@@ -38,6 +41,17 @@ export const replace = (s, params) => params && is(Object, params)
   )
   : s;
 
+export const isStringNumber = s => !isNaN(+s);
+
+export const stringToPath = s => {  // from lodash/fp
+  const result = [];
+  s.replace(rePropName, (match, number, quote, subString) => {
+    const v = quote ? subString.replace(reEscapeChar, '$1') : (number || match);
+    result.push(isStringNumber(v) ? +v : v);
+  });
+  return result;
+};
+
 // date
 
 export const toDate = s => {
@@ -57,6 +71,12 @@ export const toAbsDate = d => new Date(d).toISOString().slice(0, 10);
 export const isPrimitiveType = anyPass([is(Number), is(String), is(Boolean)]);
 
 export const diff = p => differenceWith((a, b) => isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id']);
+
+export const toLensPath = p => lensPath(is(String, p) ? stringToPath(p) : p);
+
+export const get = pipe(toLensPath, view);
+
+export const set = pipe(toLensPath, _set);
 
 // env
 
