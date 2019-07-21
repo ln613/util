@@ -22,7 +22,7 @@ export const addIndex = p => arr => arr.map((x, i) => ({ [p || 'id']: i + 1, ...
 export const sort = _sort((a, b) => a - b);
 export const sortDesc = _sort((a, b) => b - a);
 
-export const split2 = arr => splitAt(Math.floor(arr.length / 2), arr);
+export const split2 = isCeil => arr => splitAt((isCeil ? Math.ceil : Math.floor)(arr.length / 2), arr);
 
 // string
 
