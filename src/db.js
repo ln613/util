@@ -40,7 +40,7 @@ e.add = (doc, obj) => obj && is(Array, obj) && obj.length > 0
   ? db.collection(doc).insertMany(obj)
   : Promise.resolve({});
 
-e.replace = (doc, obj) => db.collection(doc).replaceOne({ id: obj.id }, obj)
+e.replace = (doc, obj) => db.collection(doc).replaceOne({ id: obj.id }, obj, { upsert: true })
 
 e.addToList = (doc, id, list, obj) => db.collection(doc).update({ id: +id }, { $addToSet: { [list]: obj } })
 
