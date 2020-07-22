@@ -33,7 +33,7 @@ e.getIdName = doc => db.collection(doc).find().project({ _id: 0, id: 1, name: 1 
 e.getById = (doc, id) => db.collection(doc).findOne({ id: +id }, { projection: { _id: 0 }})
 
 e.search = (doc, prop, val, fields) => db.collection(doc)
-  .find(prop ? { [prop]: is(String, val) ? new RegExp(escapeRegex(val), 'i') : +val } : {})
+  .find(prop ? { [prop]: is(String, val) ? new RegExp(val, 'i') : +val } : {})
   .project(merge({ _id: 0, id: 1, name: 1 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {}))
   .toArray()
 
