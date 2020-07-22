@@ -82,7 +82,7 @@ e.getById = function (doc, id) {
 };
 
 e.search = function (doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, is(String, val) ? new RegExp(escapeRegex(val), 'i') : +val) : {}).project(merge({
+  return db.collection(doc).find(prop ? _defineProperty({}, prop, is(String, val) ? new RegExp(val, 'i') : +val) : {}).project(merge({
     _id: 0,
     id: 1,
     name: 1
