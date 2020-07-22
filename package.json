@@ -1,6 +1,6 @@
 {
   "name": "@ln613/util",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "Utility functions. An extension to ramda.",
   "keywords": [
     "javascript",
