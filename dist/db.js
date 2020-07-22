@@ -9,6 +9,9 @@ var _require = require('ramda'),
     merge = _require.merge,
     is = _require.is;
 
+var _require2 = require('.'),
+    escapeRegex = _require2.escapeRegex;
+
 var db = null;
 var e = {};
 
@@ -79,7 +82,7 @@ e.getById = function (doc, id) {
 };
 
 e.search = function (doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, isNaN(+val) ? new RegExp(val, 'i') : +val) : {}).project(merge({
+  return db.collection(doc).find(prop ? _defineProperty({}, prop, isNaN(+val) ? new RegExp(escapeRegex(val), 'i') : +val) : {}).project(merge({
     _id: 0,
     id: 1,
     name: 1

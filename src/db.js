@@ -1,5 +1,6 @@
 const MongoClient = require('mongodb').MongoClient;
 const { fromPairs, merge, is } = require('ramda');
+const { escapeRegex } = require('.');
 
 let db = null;
 const e = {};
@@ -32,7 +33,7 @@ e.getIdName = doc => db.collection(doc).find().project({ _id: 0, id: 1, name: 1 
 e.getById = (doc, id) => db.collection(doc).findOne({ id: +id }, { projection: { _id: 0 }})
 
 e.search = (doc, prop, val, fields) => db.collection(doc)
-  .find(prop ? { [prop]: isNaN(+val) ? new RegExp(val, 'i') : +val } : {})
+  .find(prop ? { [prop]: isNaN(+val) ? new RegExp(escapeRegex(val), 'i') : +val } : {})
   .project(merge({ _id: 0, id: 1, name: 1 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {}))
   .toArray()
 

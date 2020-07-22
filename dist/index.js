@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = exports.set = exports.get = exports.toLensPath = exports.diff = exports.isPrimitiveType = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.isStringNumber = exports.replace = exports.toLowerDash = exports.toTitleCase = exports.split2 = exports.sortDesc = exports.sort = exports.addIndex = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.isIn = exports.toSingleArray = exports.tap = void 0;
+exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = exports.set = exports.get = exports.toLensPath = exports.diff = exports.isPrimitiveType = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.isStringNumber = exports.escapeRegex = exports.replace = exports.toLowerDash = exports.toTitleCase = exports.split2 = exports.sortDesc = exports.sort = exports.addIndex = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.isIn = exports.toSingleArray = exports.tap = void 0;
 
 var _ramda = require("ramda");
 
@@ -128,6 +128,12 @@ var replace = function replace(s, params) {
 };
 
 exports.replace = replace;
+
+var escapeRegex = function escapeRegex(s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
+exports.escapeRegex = escapeRegex;
 
 var isStringNumber = function isStringNumber(s) {
   return !isNaN(+s);

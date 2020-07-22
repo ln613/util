@@ -41,6 +41,9 @@ export const replace = (s, params) => params && is(Object, params)
   )
   : s;
 
+export const escapeRegex = s =>
+  s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+
 export const isStringNumber = s => !isNaN(+s);
 
 export const stringToPath = s => {  // from lodash/fp
