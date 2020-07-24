@@ -1,7 +1,7 @@
 {
   "name": "@ln613/util",
   "version": "1.8.2",
-  "description": "Utility functions. An extension to ramda.",
+  "description": "Utility functions",
   "keywords": [
     "javascript",
     "ramda"
@@ -27,7 +27,6 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
-    "mongodb": "^3.5.7",
     "ramda": "^0.25.0"
   }
 }
