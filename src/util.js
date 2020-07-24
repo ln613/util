@@ -1,5 +1,4 @@
-import { sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc, lensPath, view, set as _set, over, fromPairs } from 'ramda'
-//import $ from 'jquery'
+import { anyPass, ascend, curry, descend, differenceWith, dissoc, find, fromPairs, is, isNil, lensPath, pipe, prop, reduce, set as _set, sort as _sort, sortWith, splitAt, view } from 'ramda'
 import cheerio from 'cheerio'
 import axios from 'axios'
 
@@ -19,6 +18,7 @@ const findzz = (r, z) => {
 // misc
 
 export const use = (...args) => f => f(...args)
+export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...r, l])), Promise.resolve([]));
 export const tap = (x, title = '', f = t => t, pred = true) => {
   if (is(Function, pred) ? pred(x) : pred) {
     if (title) console.log(`${title} - `, f(x))
@@ -29,16 +29,17 @@ export const tap = (x, title = '', f = t => t, pred = true) => {
 
 // array
 
-export const findByProp = p => val => arr => find(x => x[p] == val, arr || []);
+export const findByProp = curry((p, val, arr) => find(x => x[p] == val, arr || []));
 export const findById = findByProp('id');
 export const findByName = findByProp('name');
-export const getPropById = p => id => pipe(findById(id), prop(p));
+export const getPropById = curry((p, id) => pipe(findById(id), prop(p)));
 export const getNameById = getPropById('name')
-export const getPropByName = p => name => pipe(findByName(name), prop(p));
+export const getPropByName = curry((p, name) => pipe(findByName(name), prop(p)));
 export const getPropByProp = (p1, p2, val) => pipe(findByProp(p2)(val), prop(p1));
 
 export const sort = _sort((a, b) => a - b);
 export const sortDesc = _sort((a, b) => b - a);
+export const sortBy = curry((o, arr) => sortWith(is(String, o) ? [ascend(prop(o))] : Object.entries(o).map(([k, v]) => (v ? descend : ascend)(prop(k))), arr));
 
 export const toSingleArray = arr => is(Array, arr) ? arr : [arr];
 export const isIn = arr => val => arr.some(item => val === item);
@@ -90,6 +91,11 @@ export const isProd = () => process.env.NODE_ENV || isIn(['production', 'prod'])
 export const host = isDev() ? `http://localhost:${port}/` : '/';
 export const api = host + 'api/';
 export const admin = host + 'admin/';
+
+// http
+
+export const fetch = url => axios.get(url).then(r => r.data);
+export const post = (url, data, headers) => axios.post(url, data, headers && { headers }).then(r => r.data);
 
 // html
 

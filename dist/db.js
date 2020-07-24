@@ -1,27 +1,27 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
+
+var _mongodb = require("mongodb");
+
+var _ramda = require("ramda");
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var MongoClient = require('mongodb').MongoClient;
-
-var _require = require('ramda'),
-    fromPairs = _require.fromPairs,
-    merge = _require.merge,
-    is = _require.is;
-
-var _require2 = require('.'),
-    escapeRegex = _require2.escapeRegex;
-
 var db = null;
-var e = {};
 
-e.connectDB = function () {
-  return db ? Promise.resolve(db) : MongoClient.connect(process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)).then(function (x) {
+var connectDB = function connectDB() {
+  return db ? Promise.resolve(db) : _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)).then(function (x) {
     return db = x.db();
   });
 };
 
-e.initdocs = function (docs) {
+exports.connectDB = connectDB;
+
+var initdocs = function initdocs(docs) {
   var f = function f(k) {
     return function (r) {
       return db.collection(k).insertMany(docs[k]);
@@ -33,37 +33,49 @@ e.initdocs = function (docs) {
   }));
 };
 
-e.initdata = function (d) {
+exports.initdocs = initdocs;
+
+var initdata = function initdata(d) {
   return d ? Promise.resolve(d).then(function (r) {
-    return e.initdocs(r);
+    return initdocs(r);
   }) : httpGet("".concat(process.env.GITHUB_DB, "db.json")).then(function (r) {
-    return e.initdocs(r);
+    return initdocs(r);
   });
 };
 
-e.backup = function () {
-  return Promise.all(allDocs.map(e.get)).then(function (l) {
-    return fromPairs(l.map(function (d, i) {
+exports.initdata = initdata;
+
+var backup = function backup() {
+  return Promise.all(allDocs.map(get)).then(function (l) {
+    return (0, _ramda.fromPairs)(l.map(function (d, i) {
       return [allDocs[i], d];
     }));
   });
 };
 
-e.list = function () {
+exports.backup = backup;
+
+var list = function list() {
   return Object.keys(db);
 };
 
-e.count = function (doc) {
+exports.list = list;
+
+var count = function count(doc) {
   return db.collection(doc).count();
 };
 
-e.get = function (doc) {
+exports.count = count;
+
+var get = function get(doc) {
   return db.collection(doc).find().project({
     _id: 0
   }).toArray();
 };
 
-e.getIdName = function (doc) {
+exports.get = get;
+
+var getIdName = function getIdName(doc) {
   return db.collection(doc).find().project({
     _id: 0,
     id: 1,
@@ -71,7 +83,9 @@ e.getIdName = function (doc) {
   }).toArray();
 };
 
-e.getById = function (doc, id) {
+exports.getIdName = getIdName;
+
+var getById = function getById(doc, id) {
   return db.collection(doc).findOne({
     id: +id
   }, {
@@ -81,21 +95,27 @@ e.getById = function (doc, id) {
   });
 };
 
-e.search = function (doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, is(String, val) ? new RegExp(val, 'i') : +val) : {}).project(merge({
+exports.getById = getById;
+
+var search = function search(doc, prop, val, fields) {
+  return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : +val) : {}).project((0, _ramda.merge)({
     _id: 0,
     id: 1,
     name: 1
-  }, fields ? fromPairs(fields.split(',').map(function (x) {
+  }, fields ? (0, _ramda.fromPairs)(fields.split(',').map(function (x) {
     return [x, 1];
   })) : {})).toArray();
 };
 
-e.add = function (doc, obj) {
-  return obj && is(Array, obj) && obj.length > 0 ? db.collection(doc).insertMany(obj) : Promise.resolve({});
+exports.search = search;
+
+var add = function add(doc, obj) {
+  return obj && (0, _ramda.is)(Array, obj) && obj.length > 0 ? db.collection(doc).insertMany(obj) : Promise.resolve({});
 };
 
-e.replace = function (doc, obj) {
+exports.add = add;
+
+var replace = function replace(doc, obj) {
   return db.collection(doc).replaceOne({
     id: obj.id
   }, obj, {
@@ -103,7 +123,9 @@ e.replace = function (doc, obj) {
   });
 };
 
-e.addToList = function (doc, id, list, obj) {
+exports.replace = replace;
+
+var addToList = function addToList(doc, id, list, obj) {
   return db.collection(doc).update({
     id: +id
   }, {
@@ -111,7 +133,9 @@ e.addToList = function (doc, id, list, obj) {
   });
 };
 
-e.replaceList = function (doc, id, list, obj) {
+exports.addToList = addToList;
+
+var replaceList = function replaceList(doc, id, list, obj) {
   return db.collection(doc).update(_defineProperty({
     id: +id
   }, list + '.id', obj.id), {
@@ -119,7 +143,9 @@ e.replaceList = function (doc, id, list, obj) {
   });
 };
 
-e.update = function (doc, obj) {
+exports.replaceList = replaceList;
+
+var update = function update(doc, obj) {
   return db.collection(doc).update({
     id: obj.id
   }, {
@@ -127,14 +153,18 @@ e.update = function (doc, obj) {
   });
 };
 
-e["delete"] = function (doc, obj) {
+exports.update = update;
+
+var remove = function remove(doc, obj) {
   return db.collection(doc).remove({
     id: obj.id
   });
 };
 
-e.deleteAll = function (doc) {
+exports.remove = remove;
+
+var removeAll = function removeAll(doc) {
   return db.collection(doc).deleteMany({});
 };
 
-module.exports = e;
+exports.removeAll = removeAll;
