@@ -8,14 +8,16 @@ exports.tap = void 0;
 // import { sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc, lensPath, view, set as _set, over } from 'ramda';
 // const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
 // const reEscapeChar = /\\(\\)?/g; // from lodash/fp
-// export const tap = (x, title = '', f = t => t, pred = true) => {
-//   (is(Function, pred) ? pred(x) : pred) && console.log(title ? (title + ' - ') : '', f(x))
-//   return x
-// }
 var tap = function tap(x) {
-  console.log(x);
+  var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var f = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (t) {
+    return t;
+  };
+  var pred = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
+  (is(Function, pred) ? pred(x) : pred) && console.log(title ? title + ' - ' : '', f(x));
   return x;
-}; // // array
+}; //export const tap = x => { console.log(x); return x; }
+// // array
 // export const toSingleArray = arr => is(Array, arr) ? arr : [arr];
 // export const isIn = arr => val => arr.some(item => val === item);
 // export const findByProp = p => val => arr => find(x => x[p] == val, arr || []);
