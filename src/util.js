@@ -4,7 +4,7 @@
 // const reEscapeChar = /\\(\\)?/g; // from lodash/fp
 
 export const tap = (x, title = '', f = t => t, pred = true) => {
-  (is(Function, pred) ? pred(x) : pred) && console.log(title ? `${title} - ` : '', f(x))
+  (is(Function, pred) ? pred(x) : pred) && console.log(title ? (title + ' - ') : '', f(x))
   return x
 }
 

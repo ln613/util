@@ -14,7 +14,7 @@ var tap = function tap(x) {
     return t;
   };
   var pred = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-  (is(Function, pred) ? pred(x) : pred) && console.log(title ? "".concat(title, " - ") : '', f(x));
+  (is(Function, pred) ? pred(x) : pred) && console.log(title ? title + ' - ' : '', f(x));
   return x;
 }; // // array
 // export const toSingleArray = arr => is(Array, arr) ? arr : [arr];
