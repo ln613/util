@@ -25,6 +25,7 @@
     "watch": "^1.0.2"
   },
   "dependencies": {
+    "mongodb": "^3.5.7",
     "ramda": "^0.25.0"
   }
 }

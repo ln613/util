@@ -3,98 +3,253 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.tap = void 0;
+exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = exports.set = exports.get = exports.toLensPath = exports.diff = exports.isPrimitiveType = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.isStringNumber = exports.escapeRegex = exports.replace = exports.toLowerDash = exports.toTitleCase = exports.split2 = exports.sortDesc = exports.sort = exports.addIndex = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.isIn = exports.toSingleArray = exports.tap = void 0;
 
-// import { sort as _sort, find, is, isNil, pipe, reduce, prop, differenceWith, anyPass, splitAt, dissoc, lensPath, view, set as _set, over } from 'ramda';
-// const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
-// const reEscapeChar = /\\(\\)?/g; // from lodash/fp
+var _ramda = require("ramda");
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
+
+var reEscapeChar = /\\(\\)?/g; // from lodash/fp
+
 var tap = function tap(x) {
   var title = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
   var f = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : function (t) {
     return t;
   };
   var pred = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : true;
-  (is(Function, pred) ? pred(x) : pred) && console.log(title ? title + ' - ' : '', f(x));
+  ((0, _ramda.is)(Function, pred) ? pred(x) : pred) && console.log(title ? "".concat(title, " - ") : '', f(x));
   return x;
-}; //export const tap = x => { console.log(x); return x; }
-// // array
-// export const toSingleArray = arr => is(Array, arr) ? arr : [arr];
-// export const isIn = arr => val => arr.some(item => val === item);
-// export const findByProp = p => val => arr => find(x => x[p] == val, arr || []);
-// export const findById = findByProp('id');
-// export const findByName = findByProp('name');
-// export const getPropById = p => id => pipe(findById(id), prop(p));
-// export const getNameById = getPropById('name')
-// export const getPropByName = p => name => pipe(findByName(name), prop(p));
-// export const getPropByProp = (p1, p2, val) => pipe(findByProp(p2)(val), prop(p1));
-// export const addIndex = p => arr => arr.map((x, i) => ({ [p || 'id']: i + 1, ...dissoc([p || 'id'], x) }));
-// export const sort = _sort((a, b) => a - b);
-// export const sortDesc = _sort((a, b) => b - a);
-// export const split2 = isCeil => arr => splitAt((isCeil ? Math.ceil : Math.floor)(arr.length / 2), arr);
-// // string
-// export const toTitleCase = s => s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase());
-// export const toLowerDash = s => s.toLowerCase().replace(/ /g, '-');
-// export const replace = (s, params) => params && is(Object, params)
-//   ? reduce(
-//     (p, c) => p.replace(new RegExp(`\{${c}\}`, 'g'), params[c]),
-//     s,
-//     Object.keys(params)
-//   )
-//   : s;
-// export const escapeRegex = s =>
-//   s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-// export const isStringNumber = s => !isNaN(+s);
-// export const stringToPath = s => {  // from lodash/fp
-//   const result = [];
-//   s.replace(rePropName, (match, number, quote, subString) => {
-//     const v = quote ? subString.replace(reEscapeChar, '$1') : (number || match);
-//     result.push(isStringNumber(v) ? +v : v);
-//   });
-//   return result;
-// };
-// // date
-// export const toDate = s => {
-//   const d = new Date(s);
-//   return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-// }
-// export const toMonth = s => {
-//   const d = new Date(s);
-//   return `${d.getFullYear()}/${d.getMonth() + 1}`;
-// }
-// export const toAbsDate = d => new Date(d).toISOString().slice(0, 10);
-// // object
-// export const isPrimitiveType = anyPass([is(Number), is(String), is(Boolean)]);
-// export const diff = p => differenceWith((a, b) => isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id']);
-// export const toLensPath = p => lensPath(is(String, p) ? stringToPath(p) : p);
-// export const get = pipe(toLensPath, view);
-// export const set = pipe(toLensPath, _set);
-// // env
-// export const port = process.env.PORT || 3000;
-// export const isDev = () => process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-// export const isProd = () => process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
-// export const host = isDev() ? `http://localhost:${port}/` : '/';
-// export const api = host + 'api/';
-// export const admin = host + 'admin/';
-// // html
-// const extract = (html, opt) => {
-//   const o = {};
-//   opt.forEach(x => {
-//     o[x[1]] = r(x[0]).map((i, y) => { // x[0] - root element(s), x[1] - output root object name
-//       const o1 = {};
-//       const r1 = r(r(x[0])[i]);
-//       x[2].forEach(z => { // z[0] - child element(s), z[1] - output property name, 
-//         const z0 = z[0] ? (R.is(String, z[0]) ? find(r1, z[0]) : z[0](r1)) : r1; // child element(s) can be a cheerio func expecting root element
-//         const a1 = z0.length > 1; // is child element(s) an array?
-//         const a2 = R.is(Array, z[2]); // is attr(s) an array?
-//         o1[z[1]] = a2 ?
-//           (a1 ? z0.map((j, u) => R.fromPairs(z[2].map(w => [w[0], r(u).attr(w[1])]))).toArray() : R.fromPairs(z[2].map(w => [w[0], z0.attr(w[1])]))) :
-//           (a1 ? z0.map((j, u) => z[2] ? r(u).attr(z[2]) : r(u).text()).toArray() : (z[2] ? z0.attr(z[2]) : z0.text()));
-//       });
-//       return o1;
-//     }).toArray();
-//   });
-//   return o;
-// }
+}; // array
 
 
 exports.tap = tap;
+
+var toSingleArray = function toSingleArray(arr) {
+  return (0, _ramda.is)(Array, arr) ? arr : [arr];
+};
+
+exports.toSingleArray = toSingleArray;
+
+var isIn = function isIn(arr) {
+  return function (val) {
+    return arr.some(function (item) {
+      return val === item;
+    });
+  };
+};
+
+exports.isIn = isIn;
+
+var findByProp = function findByProp(p) {
+  return function (val) {
+    return function (arr) {
+      return (0, _ramda.find)(function (x) {
+        return x[p] == val;
+      }, arr || []);
+    };
+  };
+};
+
+exports.findByProp = findByProp;
+var findById = findByProp('id');
+exports.findById = findById;
+var findByName = findByProp('name');
+exports.findByName = findByName;
+
+var getPropById = function getPropById(p) {
+  return function (id) {
+    return (0, _ramda.pipe)(findById(id), (0, _ramda.prop)(p));
+  };
+};
+
+exports.getPropById = getPropById;
+var getNameById = getPropById('name');
+exports.getNameById = getNameById;
+
+var getPropByName = function getPropByName(p) {
+  return function (name) {
+    return (0, _ramda.pipe)(findByName(name), (0, _ramda.prop)(p));
+  };
+};
+
+exports.getPropByName = getPropByName;
+
+var getPropByProp = function getPropByProp(p1, p2, val) {
+  return (0, _ramda.pipe)(findByProp(p2)(val), (0, _ramda.prop)(p1));
+};
+
+exports.getPropByProp = getPropByProp;
+
+var addIndex = function addIndex(p) {
+  return function (arr) {
+    return arr.map(function (x, i) {
+      return _objectSpread(_defineProperty({}, p || 'id', i + 1), (0, _ramda.dissoc)([p || 'id'], x));
+    });
+  };
+};
+
+exports.addIndex = addIndex;
+var sort = (0, _ramda.sort)(function (a, b) {
+  return a - b;
+});
+exports.sort = sort;
+var sortDesc = (0, _ramda.sort)(function (a, b) {
+  return b - a;
+});
+exports.sortDesc = sortDesc;
+
+var split2 = function split2(isCeil) {
+  return function (arr) {
+    return (0, _ramda.splitAt)((isCeil ? Math.ceil : Math.floor)(arr.length / 2), arr);
+  };
+}; // string
+
+
+exports.split2 = split2;
+
+var toTitleCase = function toTitleCase(s) {
+  return s.replace(/\w\S*/g, function (t) {
+    return t.charAt(0).toUpperCase() + t.substr(1).toLowerCase();
+  });
+};
+
+exports.toTitleCase = toTitleCase;
+
+var toLowerDash = function toLowerDash(s) {
+  return s.toLowerCase().replace(/ /g, '-');
+};
+
+exports.toLowerDash = toLowerDash;
+
+var replace = function replace(s, params) {
+  return params && (0, _ramda.is)(Object, params) ? (0, _ramda.reduce)(function (p, c) {
+    return p.replace(new RegExp("{".concat(c, "}"), 'g'), params[c]);
+  }, s, Object.keys(params)) : s;
+};
+
+exports.replace = replace;
+
+var escapeRegex = function escapeRegex(s) {
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
+exports.escapeRegex = escapeRegex;
+
+var isStringNumber = function isStringNumber(s) {
+  return !isNaN(+s);
+};
+
+exports.isStringNumber = isStringNumber;
+
+var stringToPath = function stringToPath(s) {
+  // from lodash/fp
+  var result = [];
+  s.replace(rePropName, function (match, number, quote, subString) {
+    var v = quote ? subString.replace(reEscapeChar, '$1') : number || match;
+    result.push(isStringNumber(v) ? +v : v);
+  });
+  return result;
+}; // date
+
+
+exports.stringToPath = stringToPath;
+
+var toDate = function toDate(s) {
+  var d = new Date(s);
+  return "".concat(d.getMonth() + 1, "/").concat(d.getDate(), "/").concat(d.getFullYear());
+};
+
+exports.toDate = toDate;
+
+var toMonth = function toMonth(s) {
+  var d = new Date(s);
+  return "".concat(d.getFullYear(), "/").concat(d.getMonth() + 1);
+};
+
+exports.toMonth = toMonth;
+
+var toAbsDate = function toAbsDate(d) {
+  return new Date(d).toISOString().slice(0, 10);
+}; // object
+
+
+exports.toAbsDate = toAbsDate;
+var isPrimitiveType = (0, _ramda.anyPass)([(0, _ramda.is)(Number), (0, _ramda.is)(String), (0, _ramda.is)(Boolean)]);
+exports.isPrimitiveType = isPrimitiveType;
+
+var diff = function diff(p) {
+  return (0, _ramda.differenceWith)(function (a, b) {
+    return isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id'];
+  });
+};
+
+exports.diff = diff;
+
+var toLensPath = function toLensPath(p) {
+  return (0, _ramda.lensPath)((0, _ramda.is)(String, p) ? stringToPath(p) : p);
+};
+
+exports.toLensPath = toLensPath;
+var get = (0, _ramda.pipe)(toLensPath, _ramda.view);
+exports.get = get;
+var set = (0, _ramda.pipe)(toLensPath, _ramda.set); // env
+
+exports.set = set;
+var port = process.env.PORT || 3000;
+exports.port = port;
+
+var isDev = function isDev() {
+  return process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+};
+
+exports.isDev = isDev;
+
+var isProd = function isProd() {
+  return process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+};
+
+exports.isProd = isProd;
+var host = isDev() ? "http://localhost:".concat(port, "/") : '/';
+exports.host = host;
+var api = host + 'api/';
+exports.api = api;
+var admin = host + 'admin/'; // html
+
+exports.admin = admin;
+
+var extract = function extract(html, opt) {
+  var o = {};
+  opt.forEach(function (x) {
+    o[x[1]] = r(x[0]).map(function (i, y) {
+      // x[0] - root element(s), x[1] - output root object name
+      var o1 = {};
+      var r1 = r(r(x[0])[i]);
+      x[2].forEach(function (z) {
+        // z[0] - child element(s), z[1] - output property name, 
+        var z0 = z[0] ? R.is(String, z[0]) ? (0, _ramda.find)(r1, z[0]) : z[0](r1) : r1; // child element(s) can be a cheerio func expecting root element
+
+        var a1 = z0.length > 1; // is child element(s) an array?
+
+        var a2 = R.is(Array, z[2]); // is attr(s) an array?
+
+        o1[z[1]] = a2 ? a1 ? z0.map(function (j, u) {
+          return R.fromPairs(z[2].map(function (w) {
+            return [w[0], r(u).attr(w[1])];
+          }));
+        }).toArray() : R.fromPairs(z[2].map(function (w) {
+          return [w[0], z0.attr(w[1])];
+        })) : a1 ? z0.map(function (j, u) {
+          return z[2] ? r(u).attr(z[2]) : r(u).text();
+        }).toArray() : z[2] ? z0.attr(z[2]) : z0.text();
+      });
+      return o1;
+    }).toArray();
+  });
+  return o;
+};

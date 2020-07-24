@@ -1,1 +1,1 @@
-export { tap } from './util';
+export * from './util';
