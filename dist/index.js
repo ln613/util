@@ -4,12 +4,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var _exportNames = {
-  connectDB: true
+  add: true
 };
-Object.defineProperty(exports, "connectDB", {
+Object.defineProperty(exports, "add", {
   enumerable: true,
   get: function get() {
-    return _db.connectDB;
+    return _db.add;
   }
 });
 

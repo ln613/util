@@ -3,168 +3,44 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
+exports.add = void 0;
 
-var _mongodb = require("mongodb");
-
-var _ramda = require("ramda");
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var db = null;
-
-var connectDB = function connectDB() {
-  return db ? Promise.resolve(db) : _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)).then(function (x) {
-    return db = x.db();
-  });
-};
-
-exports.connectDB = connectDB;
-
-var initdocs = function initdocs(docs) {
-  var f = function f(k) {
-    return function (r) {
-      return db.collection(k).insertMany(docs[k]);
-    };
-  };
-
-  return Promise.all(Object.keys(docs).map(function (k) {
-    return db.collection(k).drop().then(f(k))["catch"](f(k));
-  }));
-};
-
-exports.initdocs = initdocs;
-
-var initdata = function initdata(d) {
-  return d ? Promise.resolve(d).then(function (r) {
-    return initdocs(r);
-  }) : httpGet("".concat(process.env.GITHUB_DB, "db.json")).then(function (r) {
-    return initdocs(r);
-  });
-};
-
-exports.initdata = initdata;
-
-var backup = function backup() {
-  return Promise.all(allDocs.map(get)).then(function (l) {
-    return (0, _ramda.fromPairs)(l.map(function (d, i) {
-      return [allDocs[i], d];
-    }));
-  });
-};
-
-exports.backup = backup;
-
-var list = function list() {
-  return Object.keys(db);
-};
-
-exports.list = list;
-
-var count = function count(doc) {
-  return db.collection(doc).count();
-};
-
-exports.count = count;
-
-var get = function get(doc) {
-  return db.collection(doc).find().project({
-    _id: 0
-  }).toArray();
-};
-
-exports.get = get;
-
-var getIdName = function getIdName(doc) {
-  return db.collection(doc).find().project({
-    _id: 0,
-    id: 1,
-    name: 1
-  }).toArray();
-};
-
-exports.getIdName = getIdName;
-
-var getById = function getById(doc, id) {
-  return db.collection(doc).findOne({
-    id: +id
-  }, {
-    projection: {
-      _id: 0
-    }
-  });
-};
-
-exports.getById = getById;
-
-var search = function search(doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : +val) : {}).project((0, _ramda.merge)({
-    _id: 0,
-    id: 1,
-    name: 1
-  }, fields ? (0, _ramda.fromPairs)(fields.split(',').map(function (x) {
-    return [x, 1];
-  })) : {})).toArray();
-};
-
-exports.search = search;
-
-var add = function add(doc, obj) {
-  return obj && (0, _ramda.is)(Array, obj) && obj.length > 0 ? db.collection(doc).insertMany(obj) : Promise.resolve({});
+// import { MongoClient } from 'mongodb';
+// import { fromPairs, is, merge } from 'ramda';
+// let db = null;
+// export const connectDB = () => db ? Promise.resolve(db) : MongoClient.connect(
+//   process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)
+// )
+// .then(x => db = x.db());
+// export const initdocs = docs => {
+//   const f = k => r => db.collection(k).insertMany(docs[k]);
+//   return Promise.all(
+//     Object.keys(docs).map(k => db.collection(k).drop().then(f(k)).catch(f(k)))
+//   );
+// }
+// export const initdata = d => d ? Promise.resolve(d).then(r => initdocs(r)) :
+//   httpGet(`${process.env.GITHUB_DB}db.json`).then(r => initdocs(r))
+// export const backup = () => Promise.all(allDocs.map(get)).then(l => fromPairs(l.map((d, i) => [allDocs[i], d])))
+// export const list = () => Object.keys(db)
+// export const count = doc => db.collection(doc).count()
+// export const get = doc => db.collection(doc).find().project({ _id: 0 }).toArray()
+// export const getIdName = doc => db.collection(doc).find().project({ _id: 0, id: 1, name: 1 }).toArray()
+// export const getById = (doc, id) => db.collection(doc).findOne({ id: +id }, { projection: { _id: 0 }})
+// export const search = (doc, prop, val, fields) => db.collection(doc)
+//   .find(prop ? { [prop]: is(String, val) ? new RegExp(val, 'i') : +val } : {})
+//   .project(merge({ _id: 0, id: 1, name: 1 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {}))
+//   .toArray()
+// export const add = (doc, obj) => obj && is(Array, obj) && obj.length > 0
+//   ? db.collection(doc).insertMany(obj)
+//   : Promise.resolve({});
+// export const replace = (doc, obj) => db.collection(doc).replaceOne({ id: obj.id }, obj, { upsert: true })
+// export const addToList = (doc, id, list, obj) => db.collection(doc).update({ id: +id }, { $addToSet: { [list]: obj } })
+// export const replaceList = (doc, id, list, obj) => db.collection(doc).update({ id: +id, [list + '.id']: obj.id }, { $set: { [list + '.$']:obj } })
+// export const update = (doc, obj) => db.collection(doc).update({ id: obj.id }, { $set: obj })
+// export const remove = (doc, obj) => db.collection(doc).remove({ id: obj.id })
+// export const removeAll = doc => db.collection(doc).deleteMany({})
+var add = function add(x, y) {
+  return x + y;
 };
 
 exports.add = add;
-
-var replace = function replace(doc, obj) {
-  return db.collection(doc).replaceOne({
-    id: obj.id
-  }, obj, {
-    upsert: true
-  });
-};
-
-exports.replace = replace;
-
-var addToList = function addToList(doc, id, list, obj) {
-  return db.collection(doc).update({
-    id: +id
-  }, {
-    $addToSet: _defineProperty({}, list, obj)
-  });
-};
-
-exports.addToList = addToList;
-
-var replaceList = function replaceList(doc, id, list, obj) {
-  return db.collection(doc).update(_defineProperty({
-    id: +id
-  }, list + '.id', obj.id), {
-    $set: _defineProperty({}, list + '.$', obj)
-  });
-};
-
-exports.replaceList = replaceList;
-
-var update = function update(doc, obj) {
-  return db.collection(doc).update({
-    id: obj.id
-  }, {
-    $set: obj
-  });
-};
-
-exports.update = update;
-
-var remove = function remove(doc, obj) {
-  return db.collection(doc).remove({
-    id: obj.id
-  });
-};
-
-exports.remove = remove;
-
-var removeAll = function removeAll(doc) {
-  return db.collection(doc).deleteMany({});
-};
-
-exports.removeAll = removeAll;
