@@ -283,17 +283,25 @@ var admin = host + 'admin/'; // http
 exports.admin = admin;
 
 var fetch = function fetch(url) {
-  return _axios["default"].get(url).then(function (r) {
+  return window ? window.fetch(url).then(function (r) {
+    return r.json();
+  }) : _axios["default"].get(url).then(function (r) {
     return r.data;
   });
 };
 
 exports.fetch = fetch;
 
-var post = function post(url, data, headers) {
-  return _axios["default"].post(url, data, headers && {
+var post = function post(url, data) {
+  var headers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  return window ? window.fetch(url, {
+    method: 'post',
+    mode: 'cors',
+    body: JSON.stringify(data),
     headers: headers
   }).then(function (r) {
+    return r.json();
+  }) : _axios["default"].post(url, data, headers).then(function (r) {
     return r.data;
   });
 }; // html

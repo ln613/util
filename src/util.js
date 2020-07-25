@@ -94,8 +94,12 @@ export const admin = host + 'admin/';
 
 // http
 
-export const fetch = url => axios.get(url).then(r => r.data);
-export const post = (url, data, headers) => axios.post(url, data, headers && { headers }).then(r => r.data);
+export const fetch = url => window
+  ? window.fetch(url).then(r => r.json())
+  : axios.get(url).then(r => r.data);
+export const post = (url, data, headers = {}) => window
+  ? window.fetch(url, { method: 'post', mode: 'cors', body: JSON.stringify(data), headers }).then(r => r.json())
+  : axios.post(url, data, headers).then(r => r.data);
 
 // html
 
