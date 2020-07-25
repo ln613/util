@@ -1,4 +1,4 @@
-// import { MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 // import { fromPairs, is, merge } from 'ramda';
 
 // let db = null;

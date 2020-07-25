@@ -5,7 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.add = void 0;
 
-// import { MongoClient } from 'mongodb';
+var _mongodb = require("mongodb");
+
 // import { fromPairs, is, merge } from 'ramda';
 // let db = null;
 // export const connectDB = () => db ? Promise.resolve(db) : MongoClient.connect(
