@@ -1,10 +1,5 @@
 "use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
-
 var _mongodb = require("mongodb");
 
 var _ramda = require("ramda");
@@ -13,15 +8,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var db = null;
 
-var connectDB = function connectDB() {
+e.connectDB = function () {
   return db ? Promise.resolve(db) : _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)).then(function (x) {
     return db = x.db();
   });
 };
 
-exports.connectDB = connectDB;
-
-var initdocs = function initdocs(docs) {
+e.initdocs = function (docs) {
   var f = function f(k) {
     return function (r) {
       return db.collection(k).insertMany(docs[k]);
@@ -33,9 +26,7 @@ var initdocs = function initdocs(docs) {
   }));
 };
 
-exports.initdocs = initdocs;
-
-var initdata = function initdata(d) {
+e.initdata = function (d) {
   return d ? Promise.resolve(d).then(function (r) {
     return initdocs(r);
   }) : httpGet("".concat(process.env.GITHUB_DB, "db.json")).then(function (r) {
@@ -43,9 +34,7 @@ var initdata = function initdata(d) {
   });
 };
 
-exports.initdata = initdata;
-
-var backup = function backup() {
+e.backup = function () {
   return Promise.all(allDocs.map(get)).then(function (l) {
     return (0, _ramda.fromPairs)(l.map(function (d, i) {
       return [allDocs[i], d];
@@ -53,29 +42,21 @@ var backup = function backup() {
   });
 };
 
-exports.backup = backup;
-
-var list = function list() {
+e.list = function () {
   return Object.keys(db);
 };
 
-exports.list = list;
-
-var count = function count(doc) {
+e.count = function (doc) {
   return db.collection(doc).count();
 };
 
-exports.count = count;
-
-var get = function get(doc) {
+e.get = function (doc) {
   return db.collection(doc).find().project({
     _id: 0
   }).toArray();
 };
 
-exports.get = get;
-
-var getIdName = function getIdName(doc) {
+e.getIdName = function (doc) {
   return db.collection(doc).find().project({
     _id: 0,
     id: 1,
@@ -83,9 +64,7 @@ var getIdName = function getIdName(doc) {
   }).toArray();
 };
 
-exports.getIdName = getIdName;
-
-var getById = function getById(doc, id) {
+e.getById = function (doc, id) {
   return db.collection(doc).findOne({
     id: +id
   }, {
@@ -95,9 +74,7 @@ var getById = function getById(doc, id) {
   });
 };
 
-exports.getById = getById;
-
-var search = function search(doc, prop, val, fields) {
+e.search = function (doc, prop, val, fields) {
   return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : +val) : {}).project((0, _ramda.merge)({
     _id: 0,
     id: 1,
@@ -107,15 +84,11 @@ var search = function search(doc, prop, val, fields) {
   })) : {})).toArray();
 };
 
-exports.search = search;
-
-var add = function add(doc, obj) {
+e.add = function (doc, obj) {
   return obj && (0, _ramda.is)(Array, obj) && obj.length > 0 ? db.collection(doc).insertMany(obj) : Promise.resolve({});
 };
 
-exports.add = add;
-
-var replace = function replace(doc, obj) {
+e.replace = function (doc, obj) {
   return db.collection(doc).replaceOne({
     id: obj.id
   }, obj, {
@@ -123,9 +96,7 @@ var replace = function replace(doc, obj) {
   });
 };
 
-exports.replace = replace;
-
-var addToList = function addToList(doc, id, list, obj) {
+e.addToList = function (doc, id, list, obj) {
   return db.collection(doc).update({
     id: +id
   }, {
@@ -133,9 +104,7 @@ var addToList = function addToList(doc, id, list, obj) {
   });
 };
 
-exports.addToList = addToList;
-
-var replaceList = function replaceList(doc, id, list, obj) {
+e.replaceList = function (doc, id, list, obj) {
   return db.collection(doc).update(_defineProperty({
     id: +id
   }, list + '.id', obj.id), {
@@ -143,9 +112,7 @@ var replaceList = function replaceList(doc, id, list, obj) {
   });
 };
 
-exports.replaceList = replaceList;
-
-var update = function update(doc, obj) {
+e.update = function (doc, obj) {
   return db.collection(doc).update({
     id: obj.id
   }, {
@@ -153,18 +120,12 @@ var update = function update(doc, obj) {
   });
 };
 
-exports.update = update;
-
-var remove = function remove(doc, obj) {
+e.remove = function (doc, obj) {
   return db.collection(doc).remove({
     id: obj.id
   });
 };
 
-exports.remove = remove;
-
-var removeAll = function removeAll(doc) {
+e.removeAll = function (doc) {
   return db.collection(doc).deleteMany({});
 };
-
-exports.removeAll = removeAll;
