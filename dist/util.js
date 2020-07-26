@@ -72,7 +72,7 @@ var serial = function serial(a, f) {
   return a.reduce(function (p, c) {
     return p.then(function (l) {
       return f(c).then(function (r) {
-        return [].concat(_toConsumableArray(r), [l]);
+        return [].concat(_toConsumableArray(l), [r]);
       });
     });
   }, Promise.resolve([]));

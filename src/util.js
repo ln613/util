@@ -18,7 +18,7 @@ const findzz = (r, z) => {
 // misc
 
 export const use = (...args) => f => f(...args)
-export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...r, l])), Promise.resolve([]));
+export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...l, r])), Promise.resolve([]));
 export const tap = (x, title = '', f = t => t, pred = true) => {
   if (is(Function, pred) ? pred(x) : pred) {
     if (title) console.log(`${title} - `, f(x))
