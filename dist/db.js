@@ -98,7 +98,7 @@ var getById = function getById(doc, id) {
 exports.getById = getById;
 
 var search = function search(doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : +val) : {}).project((0, _ramda.merge)({
+  return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : val) : {}).project((0, _ramda.merge)({
     _id: 0,
     id: 1,
     name: 1
