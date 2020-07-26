@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.extractUrl = exports.extractHtml = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.serial = exports.use = void 0;
+exports.extractUrl = exports.extractHtml = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.shuffle = exports.swap = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.serial = exports.use = void 0;
 
 var _ramda = require("ramda");
 
@@ -171,10 +171,30 @@ var addIndex = function addIndex(p) {
       return _objectSpread(_defineProperty({}, p || 'id', i + 1), (0, _ramda.dissoc)([p || 'id'], x));
     });
   };
+};
+
+exports.addIndex = addIndex;
+var swap = (0, _ramda.curry)(function (i1, i2, arr) {
+  var t = arr[i1];
+  arr[i1] = arr[i2];
+  arr[i2] = t;
+});
+exports.swap = swap;
+
+var shuffle = function shuffle(arr) {
+  var i1 = arr.length;
+
+  while (i1 !== 0) {
+    i1--;
+    var i2 = Math.floor(Math.random() * i1);
+    swap(i1, i2, arr);
+  }
+
+  return arr;
 }; // string
 
 
-exports.addIndex = addIndex;
+exports.shuffle = shuffle;
 
 var toTitleCase = function toTitleCase(s) {
   return s.replace(/\w\S*/g, function (t) {

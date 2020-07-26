@@ -46,6 +46,17 @@ export const isIn = arr => val => arr.some(item => val === item);
 export const split2 = isCeil => arr => splitAt((isCeil ? Math.ceil : Math.floor)(arr.length / 2), arr);
 export const addIndex = p => arr => arr.map((x, i) => ({ [p || 'id']: i + 1, ...dissoc([p || 'id'], x) }));
 
+export const swap = curry((i1, i2, arr) => { const t = arr[i1]; arr[i1] = arr[i2]; arr[i2] = t; });
+export const shuffle = arr => {
+  let i1 = arr.length;
+  while (i1 !== 0) {
+    i1--;
+    const i2 = Math.floor(Math.random() * i1);
+    swap(i1, i2, arr);
+  }
+  return arr;
+};
+
 // string
 
 export const toTitleCase = s => s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase() + t.substr(1).toLowerCase());
