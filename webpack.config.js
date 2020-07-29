@@ -1,11 +1,12 @@
-const webpack = require("webpack");
 const path = require('path');
 
 module.exports = {
 entry: './src/index.js',
 output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    library: 'U',
+    libraryTarget: 'var'    
 },
 module: {
     rules: [
@@ -17,20 +18,5 @@ module: {
             } 
         }
     ]
-},
-resolve: {
-  extensions: ['.js'],
-  alias: {
-    'util': path.resolve(__dirname, 'src/util')  // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
-  }
-},
-
-plugins: [
-
-  // ...
-
-  new webpack.ProvidePlugin({
-    'util': 'util'
-  })
-]
+}
 }
