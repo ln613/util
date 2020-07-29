@@ -1,3 +1,4 @@
 //export * from './util';
+import { head } from 'ramda';
 
-export const add = (x, y) => x + y
+export const h = l => head(l)
