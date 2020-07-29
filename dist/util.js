@@ -16,11 +16,9 @@
   Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  _exports.extractUrl = _exports.extractHtml = _exports.post = _exports.fetch = _exports.admin = _exports.api = _exports.host = _exports.isProd = _exports.isDev = _exports.port = _exports.diff = _exports.isPrimitiveType = _exports.set = _exports.get = _exports.toAbsDate = _exports.toMonth = _exports.toDate = _exports.stringToPath = _exports.replace = _exports.isStringNumber = _exports.escapeRegex = _exports.toLowerDash = _exports.toTitleCase = _exports.shuffle = _exports.swap = _exports.addIndex = _exports.split2 = _exports.isIn = _exports.toSingleArray = _exports.sortBy = _exports.sortDesc = _exports.sort = _exports.getPropByProp = _exports.getPropByName = _exports.getNameById = _exports.getPropById = _exports.findByName = _exports.findById = _exports.findByProp = _exports.tap = _exports.serial = _exports.use = void 0;
+  _exports.extractUrl = _exports.extractHtml = _exports.post = _exports.fetch = _exports.diff = _exports.isPrimitiveType = _exports.set = _exports.get = _exports.toAbsDate = _exports.toMonth = _exports.toDate = _exports.stringToPath = _exports.replace = _exports.isStringNumber = _exports.escapeRegex = _exports.toLowerDash = _exports.toTitleCase = _exports.shuffle = _exports.swap = _exports.addIndex = _exports.split2 = _exports.isIn = _exports.toSingleArray = _exports.sortBy = _exports.sortDesc = _exports.sort = _exports.getPropByProp = _exports.getPropByName = _exports.getNameById = _exports.getPropById = _exports.findByName = _exports.findById = _exports.findByProp = _exports.tap = _exports.serial = _exports.use = void 0;
   _cheerio = _interopRequireDefault(_cheerio);
   _axios = _interopRequireDefault(_axios);
-
-  var _process;
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -50,7 +48,7 @@
 
   function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0');
+  //process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
   var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
 
   var reEscapeChar = /\\(\\)?/g; // from lodash/fp
@@ -288,34 +286,16 @@
       return isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id'];
     });
   }; // env
+  // export const port = process?.env.PORT || 3000;
+  // export const isDev = () => process?.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+  // export const isProd = () => process?.env.NODE_ENV ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+  // export const host = isDev() ? `http://localhost:${port}/` : '/';
+  // export const api = host + 'api/';
+  // export const admin = host + 'admin/';
+  // http
 
 
   _exports.diff = diff;
-  var port = ((_process = process) === null || _process === void 0 ? void 0 : _process.env.PORT) || 3000;
-  _exports.port = port;
-
-  var isDev = function isDev() {
-    var _process2;
-
-    return ((_process2 = process) === null || _process2 === void 0 ? void 0 : _process2.env.NODE_ENV) && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-  };
-
-  _exports.isDev = isDev;
-
-  var isProd = function isProd() {
-    var _process3;
-
-    return ((_process3 = process) === null || _process3 === void 0 ? void 0 : _process3.env.NODE_ENV) ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
-  };
-
-  _exports.isProd = isProd;
-  var host = isDev() ? "http://localhost:".concat(port, "/") : '/';
-  _exports.host = host;
-  var api = host + 'api/';
-  _exports.api = api;
-  var admin = host + 'admin/'; // http
-
-  _exports.admin = admin;
 
   var fetch = function fetch(url) {
     return window ? window.fetch(url).then(function (r) {
