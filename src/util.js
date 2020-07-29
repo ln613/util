@@ -2,7 +2,7 @@ import { anyPass, ascend, curry, descend, differenceWith, dissoc, find, fromPair
 import cheerio from 'cheerio'
 import axios from 'axios'
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
 
 const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g // from lodash/fp
 const reEscapeChar = /\\(\\)?/g; // from lodash/fp
@@ -96,9 +96,9 @@ export const diff = p => differenceWith((a, b) => isPrimitiveType(a) ? a === b :
 
 // env
 
-export const port = process.env.PORT || 3000;
-export const isDev = () => process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-export const isProd = () => process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+export const port = process?.env.PORT || 3000;
+export const isDev = () => process?.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+export const isProd = () => process?.env.NODE_ENV ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
 export const host = isDev() ? `http://localhost:${port}/` : '/';
 export const api = host + 'api/';
 export const admin = host + 'admin/';

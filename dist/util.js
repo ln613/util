@@ -20,6 +20,8 @@
   _cheerio = _interopRequireDefault(_cheerio);
   _axios = _interopRequireDefault(_axios);
 
+  var _process;
+
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
   function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -48,7 +50,7 @@
 
   function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0');
   var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
 
   var reEscapeChar = /\\(\\)?/g; // from lodash/fp
@@ -289,17 +291,21 @@
 
 
   _exports.diff = diff;
-  var port = process.env.PORT || 3000;
+  var port = ((_process = process) === null || _process === void 0 ? void 0 : _process.env.PORT) || 3000;
   _exports.port = port;
 
   var isDev = function isDev() {
-    return process.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+    var _process2;
+
+    return ((_process2 = process) === null || _process2 === void 0 ? void 0 : _process2.env.NODE_ENV) && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
   };
 
   _exports.isDev = isDev;
 
   var isProd = function isProd() {
-    return process.env.NODE_ENV || isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+    var _process3;
+
+    return ((_process3 = process) === null || _process3 === void 0 ? void 0 : _process3.env.NODE_ENV) ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
   };
 
   _exports.isProd = isProd;
