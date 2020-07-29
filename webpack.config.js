@@ -1,22 +1,22 @@
 const path = require('path');
 
 module.exports = {
-entry: './src/index.js',
-output: {
+  entry: './src/index.js',
+  output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
     library: 'U',
-    libraryTarget: 'var'    
-},
-module: {
+    libraryTarget: 'window'    
+  },
+  module: {
     rules: [
-        {
-            test: /\.js$/, //using regex to tell babel exactly what files to transcompile
-            exclude: /node_modules/, // files to be ignored
-            use: {
-                loader: 'babel-loader' // specify the loader
-            } 
-        }
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        } 
+      }
     ]
-}
+  }
 }
