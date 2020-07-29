@@ -1,3 +1,4 @@
+const webpack = require("webpack");
 const path = require('path');
 
 module.exports = {
@@ -16,5 +17,20 @@ module: {
             } 
         }
     ]
-}
+},
+resolve: {
+  extensions: ['.js'],
+  alias: {
+    'util': path.resolve(__dirname, 'src/util')  // <-- When you build or restart dev-server, you'll get an error if the path to your utils.js file is incorrect.
+  }
+},
+
+plugins: [
+
+  // ...
+
+  new webpack.ProvidePlugin({
+    'util': 'util'
+  })
+]
 }
