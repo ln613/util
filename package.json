@@ -12,8 +12,9 @@
   },
   "main": "dist",
   "scripts": {
-    "start": "watch \"npm run build\" src",
-    "build": "webpack",
+    "start": "watch \"npm run build && npm run browser\" src",
+    "build": "babel src --out-dir dist",
+    "browser": "webpack",
     "test": "jest"
   },
   "author": "Nan Li",
@@ -21,7 +22,7 @@
   "devDependencies": {
     "@babel/cli": "^7.8.4",
     "@babel/core": "^7.9.6",
-    "@babel/plugin-transform-modules-umd": "^7.10.4",
+    "@babel/plugin-proposal-export-namespace-from": "^7.10.4",
     "@babel/preset-env": "^7.9.6",
     "babel-loader": "^8.1.0",
     "watch": "^1.0.2",

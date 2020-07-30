@@ -1,17 +1,8 @@
 {
   "presets": [
-    ["@babel/preset-env", { "modules": false,"targets": {
-      "browsers": [
-          "last 5 versions",
-          "ie >= 8"
-      ]
-  } }]
+    "@babel/preset-env"
   ],
   "plugins": [
-    ["@babel/plugin-transform-modules-umd", {
-      "globals": {
-        "util": "U"
-      }
-    }]
+    "@babel/plugin-proposal-export-namespace-from"
   ]
 }
