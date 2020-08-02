@@ -9,6 +9,10 @@ var _cheerio = _interopRequireDefault(require("cheerio"));
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _ramda = require("ramda");
+
+var _util = require("./util");
+
 var _process;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -29,7 +33,7 @@ exports.port = port;
 var isDev = function isDev() {
   var _process2;
 
-  return ((_process2 = process) === null || _process2 === void 0 ? void 0 : _process2.env.NODE_ENV) && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
+  return ((_process2 = process) === null || _process2 === void 0 ? void 0 : _process2.env.NODE_ENV) && (0, _util.isIn)(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
 };
 
 exports.isDev = isDev;
@@ -37,7 +41,7 @@ exports.isDev = isDev;
 var isProd = function isProd() {
   var _process3;
 
-  return ((_process3 = process) === null || _process3 === void 0 ? void 0 : _process3.env.NODE_ENV) ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+  return ((_process3 = process) === null || _process3 === void 0 ? void 0 : _process3.env.NODE_ENV) ? true : (0, _util.isIn)(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
 };
 
 exports.isProd = isProd;
@@ -79,17 +83,17 @@ var extractHtml = function extractHtml(html, opt) {
       var r1 = r(r(x[0])[i]);
       x[2].forEach(function (z) {
         // z[0] - child element(s), z[1] - output property name, 
-        var z0 = z[0] ? is(String, z[0]) ? findzz(r1, z[0]) : z[0](r1) : r1; // child element(s) can be a cheerio func expecting root element
+        var z0 = z[0] ? (0, _ramda.is)(String, z[0]) ? findzz(r1, z[0]) : z[0](r1) : r1; // child element(s) can be a cheerio func expecting root element
 
         var a1 = z0.length > 1; // is child element(s) an array?
 
-        var a2 = is(Array, z[2]); // is attr(s) an array?
+        var a2 = (0, _ramda.is)(Array, z[2]); // is attr(s) an array?
 
         o1[z[1]] = a2 ? a1 ? z0.map(function (j, u) {
-          return fromPairs(z[2].map(function (w) {
+          return (0, _ramda.fromPairs)(z[2].map(function (w) {
             return [w[0], r(u).attr(w[1])];
           }));
-        }).toArray() : fromPairs(z[2].map(function (w) {
+        }).toArray() : (0, _ramda.fromPairs)(z[2].map(function (w) {
           return [w[0], z0.attr(w[1])];
         })) : a1 ? z0.map(function (j, u) {
           return z[2] ? r(u).attr(z[2]) : r(u).text();

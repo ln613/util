@@ -1,5 +1,7 @@
 import cheerio from 'cheerio'
 import axios from 'axios'
+import { fromPairs, is } from 'ramda';
+import { isIn } from './util'
 
 process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
 
