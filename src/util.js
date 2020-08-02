@@ -1,24 +1,21 @@
-import { anyPass, ascend, curry, descend, differenceWith, dissoc, find, fromPairs, is, isNil, lensPath, pipe, prop, reduce, set as _set, sort as _sort, sortWith, splitAt, view } from 'ramda'
-import cheerio from 'cheerio'
-import axios from 'axios'
-
-//process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
+import { anyPass, ascend, both, curry, descend, differenceWith, dissoc, find, fromPairs, is, isNil, lensPath, pipe, prop, reduce, set as _set, sort as _sort, sortWith, splitAt, view } from 'ramda'
 
 const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g // from lodash/fp
 const reEscapeChar = /\\(\\)?/g; // from lodash/fp
 const toLensPath = p => lensPath(is(String, p) ? stringToPath(p) : p)
-const findzz = (r, z) => {
-  const zz = z.split(':');
-  const o = r.find(zz[0]);
-  if (o.length > 1 && zz.length > 1)
-    return o.eq(zz[1]);
-  return o;
-}
 
 // misc
 
+export const C = c => () => c
+export const T = () => true
+export const F = () => false
+export const N = p => pipe(p, not)
+export const P = Promise.resolve({})
+export const noneEmptyArray = both(is(Array), N(isEmpty))
+export const noneEmptyObject = both(is(Object), N(isEmpty))
 export const use = (...args) => f => f(...args)
-export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...l, r])), Promise.resolve([]));
+export const pickOne = (k, o) => use(o && (o[k] || o['default']))
+export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...l, r])), Promise.resolve([]))
 export const tap = (x, title = '', f = t => t, pred = true) => {
   if (is(Function, pred) ? pred(x) : pred) {
     if (title) console.log(`${title} - `, f(x))
@@ -93,46 +90,3 @@ export const get = pipe(toLensPath, view);
 export const set = pipe(toLensPath, _set);
 export const isPrimitiveType = anyPass([is(Number), is(String), is(Boolean)]);
 export const diff = p => differenceWith((a, b) => isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id']);
-
-// env
-
-// export const port = process?.env.PORT || 3000;
-// export const isDev = () => process?.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-// export const isProd = () => process?.env.NODE_ENV ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
-// export const host = isDev() ? `http://localhost:${port}/` : '/';
-// export const api = host + 'api/';
-// export const admin = host + 'admin/';
-
-// http
-
-export const fetch = url => window
-  ? window.fetch(url).then(r => r.json())
-  : axios.get(url).then(r => r.data);
-export const post = (url, data, headers = {}) => window
-  ? window.fetch(url, { method: 'post', mode: 'cors', body: JSON.stringify(data), headers }).then(r => r.json())
-  : axios.post(url, data, headers).then(r => r.data);
-
-// html
-
-export const extractHtml = (html, opt) => {
-  const o = {};
-  const r = cheerio.load(html);
-  opt.forEach(x => {
-    o[x[1]] = r(x[0]).map((i, y) => { // x[0] - root element(s), x[1] - output root object name
-      const o1 = {};
-      const r1 = r(r(x[0])[i]);
-      x[2].forEach(z => { // z[0] - child element(s), z[1] - output property name, 
-        const z0 = z[0] ? (is(String, z[0]) ? findzz(r1, z[0]) : z[0](r1)) : r1; // child element(s) can be a cheerio func expecting root element
-        const a1 = z0.length > 1; // is child element(s) an array?
-        const a2 = is(Array, z[2]); // is attr(s) an array?
-        o1[z[1]] = a2 ?
-          (a1 ? z0.map((j, u) => fromPairs(z[2].map(w => [w[0], r(u).attr(w[1])]))).toArray() : fromPairs(z[2].map(w => [w[0], z0.attr(w[1])]))) :
-          (a1 ? z0.map((j, u) => z[2] ? r(u).attr(z[2]) : r(u).text()).toArray() : (z[2] ? z0.attr(z[2]) : z0.text()));
-      });
-      return o1;
-    }).toArray();
-  });
-  return o;
-}
-
-export const extractUrl = (url, opt) => axios.get(url).then(r => extractHtml(r.data, opt))

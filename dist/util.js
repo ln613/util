@@ -3,15 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.extractUrl = exports.extractHtml = exports.post = exports.fetch = exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.shuffle = exports.swap = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.serial = exports.use = void 0;
+exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.shuffle = exports.swap = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.serial = exports.pickOne = exports.use = exports.noneEmptyObject = exports.noneEmptyArray = exports.P = exports.N = exports.F = exports.T = exports.C = void 0;
 
 var _ramda = require("ramda");
-
-var _cheerio = _interopRequireDefault(require("cheerio"));
-
-var _axios = _interopRequireDefault(require("axios"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
@@ -39,22 +33,46 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-//process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
 var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g; // from lodash/fp
 
 var reEscapeChar = /\\(\\)?/g; // from lodash/fp
 
 var toLensPath = function toLensPath(p) {
   return (0, _ramda.lensPath)((0, _ramda.is)(String, p) ? stringToPath(p) : p);
-};
-
-var findzz = function findzz(r, z) {
-  var zz = z.split(':');
-  var o = r.find(zz[0]);
-  if (o.length > 1 && zz.length > 1) return o.eq(zz[1]);
-  return o;
 }; // misc
 
+
+var C = function C(c) {
+  return function () {
+    return c;
+  };
+};
+
+exports.C = C;
+
+var T = function T() {
+  return true;
+};
+
+exports.T = T;
+
+var F = function F() {
+  return false;
+};
+
+exports.F = F;
+
+var N = function N(p) {
+  return (0, _ramda.pipe)(p, not);
+};
+
+exports.N = N;
+var P = Promise.resolve({});
+exports.P = P;
+var noneEmptyArray = (0, _ramda.both)((0, _ramda.is)(Array), N(isEmpty));
+exports.noneEmptyArray = noneEmptyArray;
+var noneEmptyObject = (0, _ramda.both)((0, _ramda.is)(Object), N(isEmpty));
+exports.noneEmptyObject = noneEmptyObject;
 
 var use = function use() {
   for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
@@ -67,6 +85,12 @@ var use = function use() {
 };
 
 exports.use = use;
+
+var pickOne = function pickOne(k, o) {
+  return use(o && (o[k] || o['default']));
+};
+
+exports.pickOne = pickOne;
 
 var serial = function serial(a, f) {
   return a.reduce(function (p, c) {
@@ -276,85 +300,6 @@ var diff = function diff(p) {
   return (0, _ramda.differenceWith)(function (a, b) {
     return isPrimitiveType(a) ? a === b : a[p || 'id'] === b[p || 'id'];
   });
-}; // env
-// export const port = process?.env.PORT || 3000;
-// export const isDev = () => process?.env.NODE_ENV && isIn(['development', 'dev'])(process.env.NODE_ENV.toLowerCase());
-// export const isProd = () => process?.env.NODE_ENV ? true : isIn(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
-// export const host = isDev() ? `http://localhost:${port}/` : '/';
-// export const api = host + 'api/';
-// export const admin = host + 'admin/';
-// http
-
+};
 
 exports.diff = diff;
-
-var fetch = function fetch(url) {
-  return window ? window.fetch(url).then(function (r) {
-    return r.json();
-  }) : _axios["default"].get(url).then(function (r) {
-    return r.data;
-  });
-};
-
-exports.fetch = fetch;
-
-var post = function post(url, data) {
-  var headers = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-  return window ? window.fetch(url, {
-    method: 'post',
-    mode: 'cors',
-    body: JSON.stringify(data),
-    headers: headers
-  }).then(function (r) {
-    return r.json();
-  }) : _axios["default"].post(url, data, headers).then(function (r) {
-    return r.data;
-  });
-}; // html
-
-
-exports.post = post;
-
-var extractHtml = function extractHtml(html, opt) {
-  var o = {};
-
-  var r = _cheerio["default"].load(html);
-
-  opt.forEach(function (x) {
-    o[x[1]] = r(x[0]).map(function (i, y) {
-      // x[0] - root element(s), x[1] - output root object name
-      var o1 = {};
-      var r1 = r(r(x[0])[i]);
-      x[2].forEach(function (z) {
-        // z[0] - child element(s), z[1] - output property name, 
-        var z0 = z[0] ? (0, _ramda.is)(String, z[0]) ? findzz(r1, z[0]) : z[0](r1) : r1; // child element(s) can be a cheerio func expecting root element
-
-        var a1 = z0.length > 1; // is child element(s) an array?
-
-        var a2 = (0, _ramda.is)(Array, z[2]); // is attr(s) an array?
-
-        o1[z[1]] = a2 ? a1 ? z0.map(function (j, u) {
-          return (0, _ramda.fromPairs)(z[2].map(function (w) {
-            return [w[0], r(u).attr(w[1])];
-          }));
-        }).toArray() : (0, _ramda.fromPairs)(z[2].map(function (w) {
-          return [w[0], z0.attr(w[1])];
-        })) : a1 ? z0.map(function (j, u) {
-          return z[2] ? r(u).attr(z[2]) : r(u).text();
-        }).toArray() : z[2] ? z0.attr(z[2]) : z0.text();
-      });
-      return o1;
-    }).toArray();
-  });
-  return o;
-};
-
-exports.extractHtml = extractHtml;
-
-var extractUrl = function extractUrl(url, opt) {
-  return _axios["default"].get(url).then(function (r) {
-    return extractHtml(r.data, opt);
-  });
-};
-
-exports.extractUrl = extractUrl;

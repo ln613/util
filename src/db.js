@@ -1,5 +1,6 @@
 import { MongoClient } from 'mongodb';
-import { fromPairs, is, merge } from 'ramda';
+import { fromPairs, is, merge, cond } from 'ramda';
+import { C, N, T, P, noneEmptyArray, noneEmptyObject } from './util';
 
 let db = null;
 
@@ -35,11 +36,17 @@ export const search = (doc, prop, val, fields) => db.collection(doc)
   .project(merge({ _id: 0, id: 1, name: 1 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {}))
   .toArray()
 
-export const add = (doc, obj) => obj && is(Array, obj) && obj.length > 0
-  ? db.collection(doc).insertMany(obj)
-  : Promise.resolve({});
+export const add = (doc, obj) => cond([
+  [noneEmptyArray, db.collection(doc).insertMany],
+  [noneEmptyObject, db.collection(doc).insert],
+  [T, C(P)],
+], obj)
 
-export const replace = (doc, obj) => db.collection(doc).replaceOne({ id: obj.id }, obj, { upsert: true })
+export const replace = (doc, obj) => cond([
+  [noneEmptyArray, a => Promise.all(a.map(o => replace(doc, o)))],
+  [noneEmptyObject, o => db.collection(doc).replaceOne({ id: o.id }, o, { upsert: true })],
+  [T, C(P)],
+], obj)
 
 export const addToList = (doc, id, list, obj) => db.collection(doc).update({ id: +id }, { $addToSet: { [list]: obj } })
 

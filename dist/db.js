@@ -9,6 +9,8 @@ var _mongodb = require("mongodb");
 
 var _ramda = require("ramda");
 
+var _util = require("./util");
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var db = null;
@@ -110,17 +112,23 @@ var search = function search(doc, prop, val, fields) {
 exports.search = search;
 
 var add = function add(doc, obj) {
-  return obj && (0, _ramda.is)(Array, obj) && obj.length > 0 ? db.collection(doc).insertMany(obj) : Promise.resolve({});
+  return (0, _ramda.cond)([[_util.noneEmptyArray, db.collection(doc).insertMany], [_util.noneEmptyObject, db.collection(doc).insert], [_util.T, (0, _util.C)(_util.P)]], obj);
 };
 
 exports.add = add;
 
 var replace = function replace(doc, obj) {
-  return db.collection(doc).replaceOne({
-    id: obj.id
-  }, obj, {
-    upsert: true
-  });
+  return (0, _ramda.cond)([[_util.noneEmptyArray, function (a) {
+    return Promise.all(a.map(function (o) {
+      return replace(doc, o);
+    }));
+  }], [_util.noneEmptyObject, function (o) {
+    return db.collection(doc).replaceOne({
+      id: o.id
+    }, o, {
+      upsert: true
+    });
+  }], [_util.T, (0, _util.C)(_util.P)]], obj);
 };
 
 exports.replace = replace;
