@@ -1,4 +1,4 @@
-import { anyPass, ascend, both, curry, descend, differenceWith, dissoc, find, fromPairs, is, isNil, lensPath, pipe, prop, reduce, set as _set, sort as _sort, sortWith, splitAt, view } from 'ramda'
+import { anyPass, ascend, both, curry, descend, differenceWith, dissoc, find, is, isEmpty, lensPath, pipe, prop, reduce, set as _set, sort as _sort, sortWith, splitAt, view } from 'ramda'
 
 const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g // from lodash/fp
 const reEscapeChar = /\\(\\)?/g; // from lodash/fp

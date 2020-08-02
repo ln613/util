@@ -69,9 +69,9 @@ var N = function N(p) {
 exports.N = N;
 var P = Promise.resolve({});
 exports.P = P;
-var noneEmptyArray = (0, _ramda.both)((0, _ramda.is)(Array), N(isEmpty));
+var noneEmptyArray = (0, _ramda.both)((0, _ramda.is)(Array), N(_ramda.isEmpty));
 exports.noneEmptyArray = noneEmptyArray;
-var noneEmptyObject = (0, _ramda.both)((0, _ramda.is)(Object), N(isEmpty));
+var noneEmptyObject = (0, _ramda.both)((0, _ramda.is)(Object), N(_ramda.isEmpty));
 exports.noneEmptyObject = noneEmptyObject;
 
 var use = function use() {
