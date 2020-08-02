@@ -134,7 +134,7 @@ var replace = function replace(doc, obj) {
 exports.replace = replace;
 
 var addToList = function addToList(doc, id, list, obj) {
-  return db.collection(doc).update({
+  return db.collection(doc).updateOne({
     id: +id
   }, {
     $addToSet: _defineProperty({}, list, obj)
@@ -144,7 +144,7 @@ var addToList = function addToList(doc, id, list, obj) {
 exports.addToList = addToList;
 
 var replaceList = function replaceList(doc, id, list, obj) {
-  return db.collection(doc).update(_defineProperty({
+  return db.collection(doc).updateOne(_defineProperty({
     id: +id
   }, list + '.id', obj.id), {
     $set: _defineProperty({}, list + '.$', obj)
@@ -154,7 +154,7 @@ var replaceList = function replaceList(doc, id, list, obj) {
 exports.replaceList = replaceList;
 
 var update = function update(doc, obj) {
-  return db.collection(doc).update({
+  return db.collection(doc).updateOne({
     id: obj.id
   }, {
     $set: obj

@@ -48,11 +48,11 @@ export const replace = (doc, obj) => cond([
   [T, C(P)],
 ], obj)
 
-export const addToList = (doc, id, list, obj) => db.collection(doc).update({ id: +id }, { $addToSet: { [list]: obj } })
+export const addToList = (doc, id, list, obj) => db.collection(doc).updateOne({ id: +id }, { $addToSet: { [list]: obj } })
 
-export const replaceList = (doc, id, list, obj) => db.collection(doc).update({ id: +id, [list + '.id']: obj.id }, { $set: { [list + '.$']:obj } })
+export const replaceList = (doc, id, list, obj) => db.collection(doc).updateOne({ id: +id, [list + '.id']: obj.id }, { $set: { [list + '.$']:obj } })
 
-export const update = (doc, obj) => db.collection(doc).update({ id: obj.id }, { $set: obj })
+export const update = (doc, obj) => db.collection(doc).updateOne({ id: obj.id }, { $set: obj })
 
 export const remove = (doc, obj) => db.collection(doc).remove({ id: obj.id })
 
