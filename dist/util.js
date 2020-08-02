@@ -63,7 +63,7 @@ var F = function F() {
 exports.F = F;
 
 var N = function N(p) {
-  return (0, _ramda.pipe)(p, not);
+  return (0, _ramda.pipe)(p, _ramda.not);
 };
 
 exports.N = N;
