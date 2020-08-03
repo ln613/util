@@ -112,7 +112,11 @@ var search = function search(doc, prop, val, fields) {
 exports.search = search;
 
 var add = function add(doc, obj) {
-  return (0, _ramda.cond)([[_util.noneEmptyArray, db.collection(doc).insertMany], [_util.noneEmptyObject, db.collection(doc).insert], [_util.T, (0, _util.C)(_util.P)]])(obj);
+  return (0, _ramda.cond)([[_util.noneEmptyArray, function (a) {
+    return db.collection(doc).insertMany(a);
+  }], [_util.noneEmptyObject, function (o) {
+    return db.collection(doc).insert(o);
+  }], [_util.T, (0, _util.C)(_util.P)]])(obj);
 };
 
 exports.add = add;

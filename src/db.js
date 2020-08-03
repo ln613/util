@@ -37,8 +37,8 @@ export const search = (doc, prop, val, fields) => db.collection(doc)
   .toArray()
 
 export const add = (doc, obj) => cond([
-  [noneEmptyArray, db.collection(doc).insertMany],
-  [noneEmptyObject, db.collection(doc).insert],
+  [noneEmptyArray, a => db.collection(doc).insertMany(a)],
+  [noneEmptyObject, o => db.collection(doc).insert(o)],
   [T, C(P)],
 ])(obj)
 
