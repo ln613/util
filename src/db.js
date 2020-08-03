@@ -40,7 +40,7 @@ export const add = (doc, obj) => cond([
   [noneEmptyArray, db.collection(doc).insertMany],
   [noneEmptyObject, db.collection(doc).insert],
   [T, C(P)],
-], obj)
+])(obj)
 
 export const replace = (doc, obj) => cond([
   [noneEmptyArray, a => Promise.all(a.map(o => replace(doc, o)))],
