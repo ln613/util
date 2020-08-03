@@ -128,7 +128,7 @@ var replace = function replace(doc, obj) {
     }, o, {
       upsert: true
     });
-  }], [_util.T, (0, _util.C)(_util.P)]], obj);
+  }], [_util.T, (0, _util.C)(_util.P)]])(obj);
 };
 
 exports.replace = replace;

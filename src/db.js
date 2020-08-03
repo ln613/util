@@ -46,7 +46,7 @@ export const replace = (doc, obj) => cond([
   [noneEmptyArray, a => Promise.all(a.map(o => replace(doc, o)))],
   [noneEmptyObject, o => db.collection(doc).replaceOne({ id: o.id }, o, { upsert: true })],
   [T, C(P)],
-], obj)
+])(obj)
 
 export const addToList = (doc, id, list, obj) => db.collection(doc).updateOne({ id: +id }, { $addToSet: { [list]: obj } })
 
