@@ -17,6 +17,7 @@ export const noneEmptyObject = both(is(Object), N(isEmpty))
 export const use = (...args) => f => f(...args)
 export const pickOne = (k, o) => use(o && (o[k] || o['default']))
 export const serial = (a, f) => a.reduce((p, c) => p.then(l => f(c).then(r => [...l, r])), Promise.resolve([]))
+export const trynull = f => { try { return f(); } catch (e) { return null; } }
 export const tap = (x, title = '', f = t => t, pred = true) => {
   if (is(Function, pred) ? pred(x) : pred) {
     if (title) console.log(`${title} - `, f(x))

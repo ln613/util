@@ -27,6 +27,22 @@ export const admin = host + 'admin/';
 export const fetch = url => axios.get(url).then(r => r.data);
 export const post = (url, data, headers = {}) => axios.post(url, data, headers).then(r => r.data);
 
+const cors = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT,PATCH,DELETE,COPY,PURGE'
+};
+
+export const res = (body, code) => ({
+  statusCode: code || 200,
+  headers: {
+    ...cors,
+    //...(isDev ? cors : {}),
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(body)
+});
+
 // html
 
 export const extractHtml = (html, opt) => {
