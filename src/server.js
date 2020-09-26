@@ -1,7 +1,8 @@
 import cheerio from 'cheerio'
 import axios from 'axios'
-import { fromPairs, is } from 'ramda';
-import { isIn } from './util'
+import { fromPairs, is, isNil } from 'ramda'
+import { isIn, get, trynull } from './util'
+import { connectDB } from './db'
 
 process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
 
@@ -42,6 +43,27 @@ export const res = (body, code) => ({
   },
   body: JSON.stringify(body)
 });
+
+export const makeApi = opt => async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  const q = event.queryStringParameters;
+  const body = trynull(_ => JSON.parse(event.body));
+  const method = event.httpMethod.toLowerCase();
+  let r = {};
+
+  try {
+    if (q.db == 1) await connectDB();
+
+    const t = get(`${method}.${q.type}`, opt);
+    t && (r = t(q, body));
+
+    return res(isNil(r) ? 'Done' : r);
+  }
+  catch (e) {
+    tap(e);
+    return res(e, 500);
+  }
+};
 
 // html
 
