@@ -1,9 +1,17 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.extractUrl = exports.extractHtml = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = void 0;
+exports.extractUrl = exports.extractHtml = exports.makeApi = exports.res = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = void 0;
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _cheerio = _interopRequireDefault(require("cheerio"));
 
@@ -13,9 +21,13 @@ var _ramda = require("ramda");
 
 var _util = require("./util");
 
+var _db = require("./db");
+
 var _process;
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0');
 
@@ -66,10 +78,93 @@ var post = function post(url, data) {
   return _axios["default"].post(url, data, headers).then(function (r) {
     return r.data;
   });
+};
+
+exports.post = post;
+var cors = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS,POST,PUT,PATCH,DELETE,COPY,PURGE'
+};
+
+var res = function res(body, code) {
+  return {
+    statusCode: code || 200,
+    headers: _objectSpread(_objectSpread({}, cors), {}, {
+      //...(isDev ? cors : {}),
+      'Content-Type': 'application/json'
+    }),
+    body: JSON.stringify(body)
+  };
+};
+
+exports.res = res;
+
+var makeApi = function makeApi(opt) {
+  return /*#__PURE__*/function () {
+    var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(event, context) {
+      var q, body, method, r, t;
+      return _regenerator["default"].wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              context.callbackWaitsForEmptyEventLoop = false;
+              q = event.queryStringParameters;
+              body = (0, _util.trynull)(function (_) {
+                return JSON.parse(event.body);
+              });
+              method = event.httpMethod.toLowerCase();
+              r = {};
+              _context.prev = 5;
+
+              if (!(q.db == 1)) {
+                _context.next = 9;
+                break;
+              }
+
+              _context.next = 9;
+              return (0, _db.connectDB)();
+
+            case 9:
+              t = (0, _util.get)("".concat(method, ".").concat(q.type))(opt);
+              _context.t0 = t;
+
+              if (!_context.t0) {
+                _context.next = 15;
+                break;
+              }
+
+              _context.next = 14;
+              return t(q, body);
+
+            case 14:
+              r = _context.sent;
+
+            case 15:
+              return _context.abrupt("return", res((0, _ramda.isNil)(r) ? 'Done' : r));
+
+            case 18:
+              _context.prev = 18;
+              _context.t1 = _context["catch"](5);
+              (0, _util.tap)(_context.t1);
+              return _context.abrupt("return", res(_context.t1, 500));
+
+            case 22:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[5, 18]]);
+    }));
+
+    return function (_x, _x2) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 }; // html
 
 
-exports.post = post;
+exports.makeApi = makeApi;
 
 var extractHtml = function extractHtml(html, opt) {
   var o = {};

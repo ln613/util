@@ -1,7 +1,7 @@
 import cheerio from 'cheerio'
 import axios from 'axios'
 import { fromPairs, is, isNil } from 'ramda'
-import { isIn, get, trynull } from './util'
+import { tap, isIn, get, trynull } from './util'
 import { connectDB } from './db'
 
 process && (process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0')
@@ -54,8 +54,8 @@ export const makeApi = opt => async (event, context) => {
   try {
     if (q.db == 1) await connectDB();
 
-    const t = get(`${method}.${q.type}`, opt);
-    t && (r = t(q, body));
+    const t = get(`${method}.${q.type}`)(opt);
+    t && (r = await t(q, body));
 
     return res(isNil(r) ? 'Done' : r);
   }

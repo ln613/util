@@ -1,17 +1,19 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _mongodb = require("mongodb");
 
 var _ramda = require("ramda");
 
 var _util = require("./util");
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var db = null;
 
@@ -100,7 +102,7 @@ var getById = function getById(doc, id) {
 exports.getById = getById;
 
 var search = function search(doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? _defineProperty({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : val) : {}).project((0, _ramda.merge)({
+  return db.collection(doc).find(prop ? (0, _defineProperty2["default"])({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : val) : {}).project((0, _ramda.merge)({
     _id: 0,
     id: 1,
     name: 1
@@ -141,17 +143,17 @@ var addToList = function addToList(doc, id, list, obj) {
   return db.collection(doc).updateOne({
     id: +id
   }, {
-    $addToSet: _defineProperty({}, list, obj)
+    $addToSet: (0, _defineProperty2["default"])({}, list, obj)
   });
 };
 
 exports.addToList = addToList;
 
 var replaceList = function replaceList(doc, id, list, obj) {
-  return db.collection(doc).updateOne(_defineProperty({
+  return db.collection(doc).updateOne((0, _defineProperty2["default"])({
     id: +id
   }, list + '.id', obj.id), {
-    $set: _defineProperty({}, list + '.$', obj)
+    $set: (0, _defineProperty2["default"])({}, list + '.$', obj)
   });
 };
 

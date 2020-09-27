@@ -1,8 +1,8 @@
-import { v2, config } from 'cloudinary';
+import { v2, config as _config } from 'cloudinary';
 import axios from 'axios';
 import { sortBy, serial } from './util';
 
-config({
+export const config = () => _config({
   cloud_name: process.env.CLOUDINARY_NAME,
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET
