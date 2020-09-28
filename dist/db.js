@@ -9,6 +9,10 @@ exports.removeAll = exports.remove = exports.update = exports.replaceList = expo
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
+
 var _mongodb = require("mongodb");
 
 var _ramda = require("ramda");
@@ -17,11 +21,42 @@ var _util = require("./util");
 
 var db = null;
 
-var connectDB = function connectDB() {
-  return db ? Promise.resolve(db) : _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)).then(function (x) {
-    return db = x.db();
-  });
-};
+var connectDB = /*#__PURE__*/function () {
+  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.t0 = db;
+
+            if (_context.t0) {
+              _context.next = 5;
+              break;
+            }
+
+            _context.next = 4;
+            return _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.DB).then(function (x) {
+              return x.db();
+            });
+
+          case 4:
+            _context.t0 = db = _context.sent;
+
+          case 5:
+            return _context.abrupt("return", _context.t0);
+
+          case 6:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee);
+  }));
+
+  return function connectDB() {
+    return _ref.apply(this, arguments);
+  };
+}();
 
 exports.connectDB = connectDB;
 

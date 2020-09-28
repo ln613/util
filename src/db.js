@@ -4,10 +4,7 @@ import { C, N, T, P, noneEmptyArray, noneEmptyObject } from './util';
 
 let db = null;
 
-export const connectDB = () => db ? Promise.resolve(db) : MongoClient.connect(
-  process.env.DB_LOCAL || process.env.MONGO.replace('{0}', process.env.DB)
-)
-.then(x => db = x.db());
+export const connectDB = async () => db || (db = await MongoClient.connect(process.env.DB_LOCAL || process.env.DB).then(x => x.db()));
 
 export const initdocs = docs => {
   const f = k => r => db.collection(k).insertMany(docs[k]);
