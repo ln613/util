@@ -62,6 +62,10 @@ export const toTitleCase = s => s.replace(/\w\S*/g, t => t.charAt(0).toUpperCase
 export const toLowerDash = s => s.toLowerCase().replace(/ /g, '-');
 export const escapeRegex = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 export const isStringNumber = s => !isNaN(+s);
+export const padStart = curry((s1, n, s) => s.toString().padStart(n, s1))
+export const pad0s = padStart('0')
+export const padEnd = curry((s1, n, s) => s.toString().padEnd(n, s1))
+export const pad0e = padEnd('0')
 
 export const replace = (s, params) => params && is(Object, params)
   ? reduce(
@@ -84,7 +88,9 @@ export const stringToPath = s => {  // from lodash/fp
 
 export const toDate = s => use(new Date(s))(d => `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`)
 export const toMonth = s => use(new Date(s))(d => `${d.getFullYear()}/${d.getMonth() + 1}`)
-export const toAbsDate = d => new Date(d).toISOString().slice(0, 10);
+export const toAbsDate = d => new Date(d).toISOString().slice(0, 10)
+export const currentDate = () => use(new Date())(d => `${d.getFullYear()}-${pad0s(2, d.getMonth() + 1)}-${pad0s(2, d.getDate())}`)
+export const currentTime = () => use(new Date())(d => `${pad0s(2, d.getHours())}:${pad0s(2, d.getMinutes())}:${pad0s(2, d.getSeconds())}`)
 
 // object
 

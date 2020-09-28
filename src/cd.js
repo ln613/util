@@ -1,6 +1,6 @@
 import { v2, config as _config } from 'cloudinary';
 import axios from 'axios';
-import { sortBy, serial } from './util';
+import { sortBy, serial, tap } from './util';
 
 export const config = () => _config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -12,7 +12,7 @@ const { api, uploader, search } = v2;
 const max = { max_results: 500 };
 const prefix = f => ({ ...max, prefix: f, type: 'upload' });
 
-const uploadBase64 = (imgData, public_id) => uploader.upload('data:image/jpeg;base64,' + imgData, {
+const uploadBase64 = (imgData, public_id) => uploader.upload('data:image/png;base64,' + imgData, {
   public_id,
   // use_filename: true,
   // unique_filename: false,

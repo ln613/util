@@ -43,7 +43,7 @@ var prefix = function prefix(f) {
 };
 
 var uploadBase64 = function uploadBase64(imgData, public_id) {
-  return uploader.upload('data:image/jpeg;base64,' + imgData, {
+  return uploader.upload('data:image/png;base64,' + imgData, {
     public_id: public_id // use_filename: true,
     // unique_filename: false,
     // overwrite: true

@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.shuffle = exports.swap = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.trynull = exports.serial = exports.pickOne = exports.use = exports.noneEmptyObject = exports.noneEmptyArray = exports.P = exports.N = exports.F = exports.T = exports.C = void 0;
+exports.diff = exports.isPrimitiveType = exports.set = exports.get = exports.currentTime = exports.currentDate = exports.toAbsDate = exports.toMonth = exports.toDate = exports.stringToPath = exports.replace = exports.pad0e = exports.padEnd = exports.pad0s = exports.padStart = exports.isStringNumber = exports.escapeRegex = exports.toLowerDash = exports.toTitleCase = exports.shuffle = exports.swap = exports.addIndex = exports.split2 = exports.isIn = exports.toSingleArray = exports.sortBy = exports.sortDesc = exports.sort = exports.getPropByProp = exports.getPropByName = exports.getNameById = exports.getPropById = exports.findByName = exports.findById = exports.findByProp = exports.tap = exports.trynull = exports.serial = exports.pickOne = exports.use = exports.noneEmptyObject = exports.noneEmptyArray = exports.P = exports.N = exports.F = exports.T = exports.C = void 0;
 
 var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
@@ -241,6 +241,18 @@ var isStringNumber = function isStringNumber(s) {
 };
 
 exports.isStringNumber = isStringNumber;
+var padStart = (0, _ramda.curry)(function (s1, n, s) {
+  return s.toString().padStart(n, s1);
+});
+exports.padStart = padStart;
+var pad0s = padStart('0');
+exports.pad0s = pad0s;
+var padEnd = (0, _ramda.curry)(function (s1, n, s) {
+  return s.toString().padEnd(n, s1);
+});
+exports.padEnd = padEnd;
+var pad0e = padEnd('0');
+exports.pad0e = pad0e;
 
 var replace = function replace(s, params) {
   return params && (0, _ramda.is)(Object, params) ? (0, _ramda.reduce)(function (p, c) {
@@ -281,10 +293,26 @@ exports.toMonth = toMonth;
 
 var toAbsDate = function toAbsDate(d) {
   return new Date(d).toISOString().slice(0, 10);
+};
+
+exports.toAbsDate = toAbsDate;
+
+var currentDate = function currentDate() {
+  return use(new Date())(function (d) {
+    return "".concat(d.getFullYear(), "-").concat(pad0s(2, d.getMonth() + 1), "-").concat(pad0s(2, d.getDate()));
+  });
+};
+
+exports.currentDate = currentDate;
+
+var currentTime = function currentTime() {
+  return use(new Date())(function (d) {
+    return "".concat(pad0s(2, d.getHours()), ":").concat(pad0s(2, d.getMinutes()), ":").concat(pad0s(2, d.getSeconds()));
+  });
 }; // object
 
 
-exports.toAbsDate = toAbsDate;
+exports.currentTime = currentTime;
 var get = (0, _ramda.pipe)(toLensPath, _ramda.view);
 exports.get = get;
 var set = (0, _ramda.pipe)(toLensPath, _ramda.set);
