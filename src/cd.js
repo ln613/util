@@ -43,22 +43,22 @@ export const remove = ids =>
   api.delete_resources(ids);
 
 // { base64, pid, folder, name }
-// { imgs: { base64, public_id }, isLocal: true }
-// { imgs, pid } imgs = a list of urls
+// { imgs: { base64, pid }, isLocal: true }
+// { imgs } imgs = a list of { url, pid }
 export const upload = ({ imgs, folder, name, pid, base64, isLocal }) => base64
   ? uploadBase64(base64, pid || `${folder}/${name}`)
   : (isLocal
-    ? serial(imgs, m => uploadBase64(m.base64, m.public_id))
-    : serial(imgs.map(x => new URL(x)), m =>
-        axios.get(m.href, {
+    ? serial(imgs, m => uploadBase64(m.base64, m.pid))
+    : serial(imgs.map(x => [x.pid, new URL(x.url)]), m =>
+        axios.get(m[1].href, {
           responseType: 'arraybuffer',
           headers: {
-            Referer: m.origin
+            Referer: m[1].origin
           }
         }).then(r =>
           Buffer.from(r.data, 'binary').toString('base64')
         ).then(r =>
-          uploadBase64(r, pid)
+          uploadBase64(r, m[0])
         )
       )
   )

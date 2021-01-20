@@ -96,8 +96,8 @@ exports.content = content;
 var remove = function remove(ids) {
   return api.delete_resources(ids);
 }; // { base64, pid, folder, name }
-// { imgs: { base64, public_id }, isLocal: true }
-// { imgs, pid } imgs = a list of urls
+// { imgs: { base64, pid }, isLocal: true }
+// { imgs } imgs = a list of { url, pid }
 
 
 exports.remove = remove;
@@ -110,19 +110,19 @@ var upload = function upload(_ref) {
       base64 = _ref.base64,
       isLocal = _ref.isLocal;
   return base64 ? uploadBase64(base64, pid || "".concat(folder, "/").concat(name)) : isLocal ? (0, _util.serial)(imgs, function (m) {
-    return uploadBase64(m.base64, m.public_id);
+    return uploadBase64(m.base64, m.pid);
   }) : (0, _util.serial)(imgs.map(function (x) {
-    return new URL(x);
+    return [x.pid, new URL(x.url)];
   }), function (m) {
-    return _axios["default"].get(m.href, {
+    return _axios["default"].get(m[1].href, {
       responseType: 'arraybuffer',
       headers: {
-        Referer: m.origin
+        Referer: m[1].origin
       }
     }).then(function (r) {
       return Buffer.from(r.data, 'binary').toString('base64');
     }).then(function (r) {
-      return uploadBase64(r, pid);
+      return uploadBase64(r, m[0]);
     });
   });
 };
