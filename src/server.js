@@ -57,7 +57,7 @@ export const makeApi = opt => async (event, context) => {
     const t = get(`${method}.${q.type}`)(opt);
     t && (r = await t(q, body));
 
-    return res(isNil(r) ? 'Done' : r);
+    return res(r);
   }
   catch (e) {
     tap(e);
@@ -66,6 +66,8 @@ export const makeApi = opt => async (event, context) => {
 };
 
 // html
+
+export const parseHtml = html => cheerio.load(html);
 
 export const extractHtml = (html, opt) => {
   const o = {};

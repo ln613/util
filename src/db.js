@@ -1,10 +1,17 @@
 import { MongoClient } from 'mongodb';
 import { fromPairs, is, merge, cond } from 'ramda';
-import { C, N, T, P, noneEmptyArray, noneEmptyObject } from './util';
+import { C, N, T, P, noneEmptyArray, noneEmptyObject, tap } from './util';
 
 let db = null;
+const MongoOps = {
+  '=': '$eq',
+  '<': '$lt',
+  '>': '$gt',
+  'in': '$in',
+}
 
-export const connectDB = async () => db || (db = await MongoClient.connect(process.env.DB_LOCAL || process.env.DB).then(x => x.db()));
+export const connectDB = async conn => (!conn && db) ||
+  (db = await MongoClient.connect(conn || process.env.DB_LOCAL || process.env.DB).then(x => x.db()));
 
 export const initdocs = docs => {
   const f = k => r => db.collection(k).insertMany(docs[k]);
@@ -28,10 +35,17 @@ export const getIdName = doc => db.collection(doc).find().project({ _id: 0, id: 
 
 export const getById = (doc, id) => db.collection(doc).findOne({ id: +id }, { projection: { _id: 0 }})
 
-export const search = (doc, prop, val, fields) => db.collection(doc)
-  .find(prop ? { [prop]: is(String, val) ? new RegExp(val, 'i') : val } : {})
-  .project(merge({ _id: 0, id: 1, name: 1 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {}))
+export const search = (doc, query, fields) => {
+  //const v = is(String, value) ? new RegExp(value, 'i') : value
+  const fs = merge({ _id: 0 }, fields ? fromPairs(fields.split(',').map(x => [x, 1])) : {})
+  //const s = sortBy ? { [sortBy]: sortOrder } : {}
+
+  return db.collection(doc)
+  .find(query || {})
+  .project(fs)
+  //.sort(s)
   .toArray()
+}
 
 export const add = (doc, obj) => cond([
   [noneEmptyArray, a => db.collection(doc).insertMany(a)],

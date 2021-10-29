@@ -7,9 +7,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
 
-var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
-
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
 
 var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
@@ -20,14 +20,20 @@ var _ramda = require("ramda");
 var _util = require("./util");
 
 var db = null;
+var MongoOps = {
+  '=': '$eq',
+  '<': '$lt',
+  '>': '$gt',
+  'in': '$in'
+};
 
 var connectDB = /*#__PURE__*/function () {
-  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
+  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(conn) {
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            _context.t0 = db;
+            _context.t0 = !conn && db;
 
             if (_context.t0) {
               _context.next = 5;
@@ -35,7 +41,7 @@ var connectDB = /*#__PURE__*/function () {
             }
 
             _context.next = 4;
-            return _mongodb.MongoClient.connect(process.env.DB_LOCAL || process.env.DB).then(function (x) {
+            return _mongodb.MongoClient.connect(conn || process.env.DB_LOCAL || process.env.DB).then(function (x) {
               return x.db();
             });
 
@@ -53,7 +59,7 @@ var connectDB = /*#__PURE__*/function () {
     }, _callee);
   }));
 
-  return function connectDB() {
+  return function connectDB(_x) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -136,14 +142,16 @@ var getById = function getById(doc, id) {
 
 exports.getById = getById;
 
-var search = function search(doc, prop, val, fields) {
-  return db.collection(doc).find(prop ? (0, _defineProperty2["default"])({}, prop, (0, _ramda.is)(String, val) ? new RegExp(val, 'i') : val) : {}).project((0, _ramda.merge)({
-    _id: 0,
-    id: 1,
-    name: 1
+var search = function search(doc, query, fields) {
+  //const v = is(String, value) ? new RegExp(value, 'i') : value
+  var fs = (0, _ramda.merge)({
+    _id: 0
   }, fields ? (0, _ramda.fromPairs)(fields.split(',').map(function (x) {
     return [x, 1];
-  })) : {})).toArray();
+  })) : {}); //const s = sortBy ? { [sortBy]: sortOrder } : {}
+
+  return db.collection(doc).find(query || {}).project(fs) //.sort(s)
+  .toArray();
 };
 
 exports.search = search;

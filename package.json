@@ -12,7 +12,7 @@
   },
   "main": "dist",
   "scripts": {
-    "start": "watch \"npm run build && npm run browser\" src",
+    "start": "watch \"yarn build && yarn browser\" src",
     "build": "babel src --out-dir dist",
     "browser": "webpack",
     "test": "jest"
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "cloudinary": "^1.23.0",
     "esm": "^3.2.25",

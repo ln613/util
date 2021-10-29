@@ -5,7 +5,7 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.extractUrl = exports.extractHtml = exports.makeApi = exports.res = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = void 0;
+exports.extractUrl = exports.extractHtml = exports.parseHtml = exports.makeApi = exports.res = exports.post = exports.fetch = exports.admin = exports.api = exports.host = exports.isProd = exports.isDev = exports.port = void 0;
 
 var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
 
@@ -53,7 +53,7 @@ exports.isDev = isDev;
 var isProd = function isProd() {
   var _process3;
 
-  return ((_process3 = process) === null || _process3 === void 0 ? void 0 : _process3.env.NODE_ENV) ? true : (0, _util.isIn)(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
+  return (_process3 = process) !== null && _process3 !== void 0 && _process3.env.NODE_ENV ? true : (0, _util.isIn)(['production', 'prod'])(process.env.NODE_ENV.toLowerCase());
 };
 
 exports.isProd = isProd;
@@ -141,7 +141,7 @@ var makeApi = function makeApi(opt) {
               r = _context.sent;
 
             case 15:
-              return _context.abrupt("return", res((0, _ramda.isNil)(r) ? 'Done' : r));
+              return _context.abrupt("return", res(r));
 
             case 18:
               _context.prev = 18;
@@ -165,6 +165,12 @@ var makeApi = function makeApi(opt) {
 
 
 exports.makeApi = makeApi;
+
+var parseHtml = function parseHtml(html) {
+  return _cheerio["default"].load(html);
+};
+
+exports.parseHtml = parseHtml;
 
 var extractHtml = function extractHtml(html, opt) {
   var o = {};
