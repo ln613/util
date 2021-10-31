@@ -2,10 +2,10 @@ import { v2, config as _config } from 'cloudinary';
 import axios from 'axios';
 import { sortBy, serial, tap } from './util';
 
-export const config = () => _config({
-  cloud_name: process.env.CLOUDINARY_NAME,
-  api_key: process.env.CLOUDINARY_KEY,
-  api_secret: process.env.CLOUDINARY_SECRET
+export const config = (name, key, secret) => _config({
+  cloud_name: name || process.env.CLOUDINARY_NAME,
+  api_key: key || process.env.CLOUDINARY_KEY,
+  api_secret: secret || process.env.CLOUDINARY_SECRET
 });
 
 const { api, uploader, search } = v2;
