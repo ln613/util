@@ -88,7 +88,9 @@ var find = function find(e) {
 exports.find = find;
 
 var content = function content(f) {
-  return find('folder:' + f);
+  return Promise.all([folder(f), find('folder:' + f)]).then(function (r) {
+    return r[0].concat(r[1]);
+  });
 };
 
 exports.content = content;

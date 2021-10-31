@@ -37,7 +37,8 @@ export const find = e =>
     .then(r => sortBy('public_id', r.resources));
 
 export const content = f =>
-  find('folder:' + f);
+  Promise.all([folder(f), find('folder:' + f)])
+    .then(r => r[0].concat(r[1]));
 
 export const remove = ids =>
   api.delete_resources(ids);
