@@ -1,21 +1,23 @@
 "use strict";
 
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.removeAll = exports.remove = exports.update = exports.replaceList = exports.addToList = exports.replace = exports.add = exports.search = exports.getById = exports.getIdName = exports.get = exports.count = exports.list = exports.backup = exports.initdata = exports.initdocs = exports.connectDB = void 0;
+
+var _regenerator = _interopRequireDefault(require("@babel/runtime/regenerator"));
+
+var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));
+
+var _asyncToGenerator2 = _interopRequireDefault(require("@babel/runtime/helpers/asyncToGenerator"));
 
 var _mongodb = require("mongodb");
 
 var _ramda = require("ramda");
 
 var _util = require("./util");
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var db = null;
 var MongoOps = {
@@ -26,8 +28,8 @@ var MongoOps = {
 };
 
 var connectDB = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(conn) {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(conn) {
+    return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -184,17 +186,17 @@ var addToList = function addToList(doc, id, list, obj) {
   return db.collection(doc).updateOne({
     id: +id
   }, {
-    $addToSet: _defineProperty({}, list, obj)
+    $addToSet: (0, _defineProperty2["default"])({}, list, obj)
   });
 };
 
 exports.addToList = addToList;
 
 var replaceList = function replaceList(doc, id, list, obj) {
-  return db.collection(doc).updateOne(_defineProperty({
+  return db.collection(doc).updateOne((0, _defineProperty2["default"])({
     id: +id
   }, list + '.id', obj.id), {
-    $set: _defineProperty({}, list + '.$', obj)
+    $set: (0, _defineProperty2["default"])({}, list + '.$', obj)
   });
 };
 
