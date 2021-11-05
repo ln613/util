@@ -1,3 +1,5 @@
+import mongodb from 'mongodb';
+import { ClientEncryption } from 'mongodb-client-encryption';
 import { MongoClient } from 'mongodb';
 import { fromPairs, is, merge, cond } from 'ramda';
 import { C, N, T, P, noneEmptyArray, noneEmptyObject, tap } from './util';
