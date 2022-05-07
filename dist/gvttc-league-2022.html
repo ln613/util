@@ -5,11 +5,13 @@
   <div id="m1">Round 1</div>
   <div id="m2">Round 2</div>
   <div id="m3">Ranking</div>
+  <div id="m4">Schedule</div>
 </div>
 <br/>
 <div id="d1"></div>
 <div id="d2" class="hide"></div>
 <div id="r" class="hide"></div>
+<div id="s" class="hide"></div>
 
 <style>
 body {
@@ -120,13 +122,69 @@ body {
   const t = document.getElementById('r')
   t.innerHTML = l.map((x, i) => `<div><span class="red">${(i > 8 ? '' : '0') + (i+1)}</span> - <span class="green">${x[1]}</span> - <span class="blue">${teams[x[0]][0]}</span></div><div class="member">${teams[x[0]][1]}</div>`).join('')
 
+  const sch = [
+    [
+      [1,2,3,4,5,6],
+      [12,11,10,9,8,7]
+    ],
+    [
+      [1,12,2,3,4,5],
+      [11,10,9,8,7,6]
+    ],
+    [
+      [1,11,12,2,3,4],
+      [10,9,8,7,6,5]
+    ],
+    [
+      [1,10,11,12,2,3],
+      [9,8,7,6,5,4]
+    ],
+    [
+      [1,9,10,11,12,2],
+      [8,7,6,5,4,3]
+    ],
+    [
+      [1,8,9,10,11,12],
+      [7,6,5,4,3,2]
+    ],
+    [
+      [1,7,8,9,10,11],
+      [6,5,4,3,2,12]
+    ],
+    [
+      [1,6,7,8,9,10],
+      [5,4,3,2,12,11]
+    ],
+    [
+      [1,5,6,7,8,9],
+      [4,3,2,12,11,10]
+    ],
+    [
+      [1,4,5,6,7,8],
+      [3,2,12,11,10,9]
+    ],
+    [
+      [1,3,4,5,6,7],
+      [2,12,11,10,9,8]
+    ],
+  ]
+
+  const date = new Date('2022-04-27 12:00:00')
+  const s = document.getElementById('s')
+  s.innerHTML = sch.map((x, i) => {
+    date.setDate(date.getDate() + 7)
+    return `<div><span class="red">${date.toLocaleDateString()}</span></div>${x[0].map((y, j) => `<div class="member">${teams[x[0][j]-1][0]} vs ${teams[x[1][j]-1][0]}</div>`).join('')}`
+  }).join('')
+
   const e1 = document.getElementById('d1');
   const e2 = document.getElementById('d2');
   const e3 = document.getElementById('r');
+  const e4 = document.getElementById('s');
   const show = e => e.style.display = 'block';
   const hide = e => e.style.display = 'none';
 
-  document.getElementById('m1').addEventListener('click', () => {show(e1);hide(e2);hide(e3);});
-  document.getElementById('m2').addEventListener('click', () => {show(e2);hide(e1);hide(e3);});
-  document.getElementById('m3').addEventListener('click', () => {show(e3);hide(e1);hide(e2);});
+  document.getElementById('m1').addEventListener('click', () => {show(e1);hide(e2);hide(e3);hide(e4);});
+  document.getElementById('m2').addEventListener('click', () => {show(e2);hide(e1);hide(e3);hide(e4);});
+  document.getElementById('m3').addEventListener('click', () => {show(e3);hide(e1);hide(e2);hide(e4);});
+  document.getElementById('m4').addEventListener('click', () => {show(e4);hide(e1);hide(e2);hide(e3);});
 </script>
