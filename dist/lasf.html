@@ -1,0 +1,195 @@
+<html>
+  <head>
+<link href="out.css" rel="stylesheet" type="text/css" />
+
+<script>
+const all = [
+  [
+    "Jun 14, 2022",
+    " UBER TRIP HELP.UBER.COM, CA",
+    "$54.99"
+  ],
+  [
+    "Jun 13, 2022",
+    " CANTERS FAIRFAX LOS ANGELES, CA",
+    "$152.74",
+    "N"
+  ],
+  [
+    "Jun 11, 2022",
+    " THE GETTY 310-440-7300, CA",
+    "$20.00"
+  ],
+  [
+    "Jun 11, 2022",
+    " GILBERT TABLE TENNIS WWW.GILBERTTA, CA",
+    "$75.00",
+    "GN"
+  ],
+  [
+    "Jun 11, 2022",
+    " UBER TRIP HELP.UBER.COM, CA",
+    "$24.92"
+  ],
+  [
+    "Jun 10, 2022",
+    " VIERTEL NORTHEAST DIVISON LOS ANGELES, CA",
+    "$310.00"
+  ],
+  [
+    "Jun 8, 2022",
+    " 42834 - SEAWALL LOT 314 SAN FRANCISCO, CA",
+    "$40.00",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " STANFORD PARKMOBILE parkmobilecom, CA",
+    "$2.58",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " STANFORD UNIV BKST #670 STANFORD, CA",
+    "$113.49",
+    "BN"
+  ],
+  [
+    "Jun 6, 2022",
+    " 76 - UNITED PACIFIC 5671 MILPITAS, CA",
+    "$146.42",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " WORLD GOURMET FREMONT, CA",
+    "$64.00",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " WAL-MART #2486 SAN JOSE, CA",
+    "$26.06",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " DOLLAR TREE SAN JOSE, CA",
+    "$8.30",
+    "GBN"
+  ],
+  [
+    "Jun 6, 2022",
+    " STANFORD PARKMOBILE parkmobilecom, CA",
+    "$2.58",
+    "GBN"
+  ],
+  [
+    "Jun 5, 2022",
+    " HUNAN CUISINE FREMONT, CA",
+    "$100.00"
+  ],
+  [
+    "Jun 5, 2022",
+    " IN N OUT BURGER 194 FREMONT, CA",
+    "$25.36"
+  ],
+  [
+    "Jun 4, 2022",
+    " WENDY'S 0020 FREMONT, CA",
+    "$42.30"
+  ],
+  [
+    "Jun 3, 2022",
+    " MONTEREY MARINA LOTS 8316465651, CA",
+    "$1.50"
+  ],
+  [
+    "Jun 3, 2022",
+    " 1251 - MOTEL 6 BELMONT, CA",
+    "$519.18"
+  ],
+  [
+    "Jun 3, 2022",
+    " SAPPORO MONTEREY, CA",
+    "$174.94"
+  ],
+  [
+    "Jun 3, 2022",
+    " BEACH WAY INN ARROYO GRANDE, CA",
+    "$116.49"
+  ],
+  [
+    "Jun 3, 2022",
+    " WM SUPERCENTER #4488 MARINA, CA",
+    "$86.26"
+  ],
+  [
+    "Jun 3, 2022",
+    " SRK PETROLEUM ARROYO GRANDE, CA",
+    "$75.21"
+  ],
+  [
+    "Jun 3, 2022",
+    " MCDONALD'S F3478 ARROYO GRANDE, CA",
+    "$15.80"
+  ],
+  [
+    "Jun 3, 2022",
+    " MCDONALD'S F3478 ARROYO GRANDE, CA",
+    "$4.95"
+  ],
+  [
+    "Jun 2, 2022",
+    " WAL-MART #5152 WEST HILLS, CA",
+    "$39.03",
+    "G"
+  ],
+  [
+    "Jun 2, 2022",
+    " RUSTYS SANTA MONICA, CA",
+    "$140.00"
+  ],
+  [
+    "Jun 2, 2022",
+    " CITY OF SANTA MONICA SANTA MONICA, CA",
+    "$15.00"
+  ],
+  [
+    "Jun 2, 2022",
+    " U -SAVE CAR & TRUCK RENTA LOS ANGELES, CA",
+    "$442.68"
+  ],
+  [
+    "Jun 2, 2022",
+    " WAL-MART #5152 WEST HILLS, CA",
+    "$290.82"
+  ]
+]
+
+all.forEach(x => x[4] = x[3] ? (+x[2].slice(1) / x[3].length).toFixed(2) : (+x[2].slice(1) / 4).toFixed(2))
+
+const team = 'RGBN'.split('').map(x => [x, all.filter(y => !y[3] || y[3].includes(x)).reduce((p, c) => p + +c[4], 0)])
+console.log(team)
+window.addEventListener('load', () => {
+const t = document.getElementById('t')
+t.innerHTML = all.map((x, i) => `
+<div class="f">
+  <div class="w50">${x[0]} - ${x[1]} - ${x[2]}</div>
+  <div class="w10"></div>
+  <div class="w40">${x[3] ? `${x[3]} - ${x[4]}` : `RGBN - ${x[4]}`}</div>
+</div>
+`).join('')
+
+const p = document.getElementById('p')
+p.innerHTML = team.map(x => `<div>${x[0]} - ${x[1].toFixed(2)}</div>`).join('')
+})
+
+</script>
+</head>
+
+<body>
+  <div id="t"></div>
+  <div id="p" class="mt16"></div>
+</body>
+</html>
