@@ -132,12 +132,14 @@ const all = [
   [
     "Jun 3, 2022",
     " MCDONALD'S F3478 ARROYO GRANDE, CA",
-    "$15.80"
+    "$15.80",
+    "G"
   ],
   [
     "Jun 3, 2022",
     " MCDONALD'S F3478 ARROYO GRANDE, CA",
-    "$4.95"
+    "$4.95",
+    "N"
   ],
   [
     "Jun 2, 2022",
@@ -164,25 +166,60 @@ const all = [
     "Jun 2, 2022",
     " WAL-MART #5152 WEST HILLS, CA",
     "$290.82"
+  ],
+  [
+    "Jun 2, 2022",
+    "Taxi",
+    "$100"
+  ],
+  [
+    "Jun 5, 2022",
+    "TTA Prize",
+    "$-50",
+    "B"
+  ],
+  [
+    "Jun 12, 2022",
+    "LATTA Prize",
+    "$-200",
+    "GBN"
+  ],
+  [
+    "Jun 2, 2022",
+    "GreenMotion Car Rental",
+    "CAD$458.90"
+  ],
+  [
+    "May 14, 2022",
+    "AirBnb",
+    "CAD$430.85"
   ]
 ]
 
-all.forEach(x => x[4] = x[3] ? (+x[2].slice(1) / x[3].length).toFixed(2) : (+x[2].slice(1) / 4).toFixed(2))
+all.filter(x => !x[2].startsWith('CAD')).forEach(x => x[4] = x[3] ? (+x[2].slice(1) / x[3].length).toFixed(2) : (+x[2].slice(1) / 4).toFixed(2))
+all.filter(x => x[2].startsWith('CAD')).forEach(x => x[5] = (+x[2].slice(4) / 4).toFixed(2))
 
-const team = 'RGBN'.split('').map(x => [x, all.filter(y => !y[3] || y[3].includes(x)).reduce((p, c) => p + +c[4], 0)])
+const team = 'RGBN'.split('').map(x => [
+  x,
+  all.filter(y => !y[3] || y[3].includes(x)).reduce((p, c) => p + (c[4] ? +c[4] : 0), 0),
+  all.filter(y => !y[3] || y[3].includes(x)).reduce((p, c) => p + (c[5] ? +c[5] : 0), 0)
+])
 console.log(team)
 window.addEventListener('load', () => {
 const t = document.getElementById('t')
 t.innerHTML = all.map((x, i) => `
 <div class="f">
-  <div class="w50">${x[0]} - ${x[1]} - ${x[2]}</div>
+  <div class="w50">${x[0]} - ${x[1]}: ${x[2]}</div>
   <div class="w10"></div>
-  <div class="w40">${x[3] ? `${x[3]} - ${x[4]}` : `RGBN - ${x[4]}`}</div>
+  <div class="w40">${x[3] ? `${x[3]}: ${x[4] ? ('$' + x[4]) : ('CAD$' + x[5])}` : `RGBN: ${x[4] ? ('$' + x[4]) : ('CAD$' + x[5])}`}</div>
 </div>
 `).join('')
 
-const p = document.getElementById('p')
-p.innerHTML = team.map(x => `<div>${x[0]} - ${x[1].toFixed(2)}</div>`).join('')
+const p1 = document.getElementById('p1')
+p1.innerHTML = 'USD:' + team.map(x => `<div>${x[0]} - ${x[1].toFixed(2)}</div>`).join('')
+
+const p2 = document.getElementById('p2')
+p2.innerHTML = 'CAD:' + team.map(x => `<div>${x[0]} - ${x[2].toFixed(2)}</div>`).join('')
 })
 
 </script>
@@ -190,6 +227,8 @@ p.innerHTML = team.map(x => `<div>${x[0]} - ${x[1].toFixed(2)}</div>`).join('')
 
 <body>
   <div id="t"></div>
-  <div id="p" class="mt16"></div>
+  <div id="p1" class="mt16"></div>
+  <div id="p2" class="mt16"></div>
+  <div class="mt16">Pending: ticket $95, U-Save charge $100 (disputed)</div>
 </body>
 </html>
