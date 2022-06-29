@@ -235,7 +235,7 @@ const p2 = document.getElementById('p2')
 p2.innerHTML = 'CAD:' + team.map(x => `<div>${x[0]} - $${x[2].toFixed(2)}</div>`).join('')
 
 const p3 = document.getElementById('p3')
-p2.innerHTML = 'Total:' + team.map(x => `<div>${x[0]} - CAD$${(x[1] * cr + x[2]).toFixed(2)}</div>`).join('')
+p3.innerHTML = 'Total:' + team.map(x => `<div>${x[0]} - CAD$${(x[1] * cr + x[2]).toFixed(2)}</div>`).join('')
 })
 
 </script>
