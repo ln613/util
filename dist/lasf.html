@@ -208,13 +208,13 @@ const all = [
   [
     "Jun, 2022",
     "Nan's portion on Bill's CC",
-    "$-631.56",
+    "CAD$-631.56",
     "B"
   ],
 ]
 
 all.filter(x => !x[2].startsWith('CAD')).forEach(x => x[4] = x[3] ? (+x[2].slice(1) / x[3].length).toFixed(2) : (+x[2].slice(1) / 4).toFixed(2))
-all.filter(x => x[2].startsWith('CAD')).forEach(x => x[5] = (+x[2].slice(4) / 4).toFixed(2))
+all.filter(x => x[2].startsWith('CAD')).forEach(x => x[5] = x[3] ? (+x[2].slice(4) / x[3].length).toFixed(2) : (+x[2].slice(4) / 4).toFixed(2))
 
 const team = 'RGBN'.split('').map(x => [
   x,
