@@ -5,6 +5,11 @@
 <script>
 const all = [
   [
+    "Jun 28, 2022",
+    " CITY OF LA DOT PVB PBPHW 8665619742, CA",
+    "$95"
+  ],
+  [
     "Jun 14, 2022",
     " UBER TRIP HELP.UBER.COM, CA",
     "$54.99"
@@ -215,11 +220,16 @@ t.innerHTML = all.map((x, i) => `
 </div>
 `).join('')
 
+const cr = 1.296
+
 const p1 = document.getElementById('p1')
-p1.innerHTML = 'USD:' + team.map(x => `<div>${x[0]} - ${x[1].toFixed(2)}</div>`).join('')
+p1.innerHTML = 'USD (exchange rate 1.296):' + team.map(x => `<div>${x[0]} - $${x[1].toFixed(2)} = CAD$${(x[1] * cr).toFixed(2)}</div>`).join('')
 
 const p2 = document.getElementById('p2')
-p2.innerHTML = 'CAD:' + team.map(x => `<div>${x[0]} - ${x[2].toFixed(2)}</div>`).join('')
+p2.innerHTML = 'CAD:' + team.map(x => `<div>${x[0]} - $${x[2].toFixed(2)}</div>`).join('')
+
+const p3 = document.getElementById('p3')
+p2.innerHTML = 'Total:' + team.map(x => `<div>${x[0]} - CAD$${(x[1] * cr + x[2]).toFixed(2)}</div>`).join('')
 })
 
 </script>
@@ -229,6 +239,7 @@ p2.innerHTML = 'CAD:' + team.map(x => `<div>${x[0]} - ${x[2].toFixed(2)}</div>`)
   <div id="t"></div>
   <div id="p1" class="mt16"></div>
   <div id="p2" class="mt16"></div>
-  <div class="mt16">Pending: ticket $95, U-Save charge $100 (disputed)</div>
+  <div id="p3" class="mt16"></div>
+  <div class="mt16">Pending: U-Save charge $100 (disputed)</div>
 </body>
 </html>
